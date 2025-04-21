@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ClozeCat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+ <div id="startScreen">
+  <img src="title.png" alt="ClozeCat">
+  <img id="startCat" src="waiting.png" alt="ClozeCat">
+  <div id="passwordSpeechBubble" style="display: none; position: absolute; background: white; border-radius: 20px; padding: 15px; max-width: 200px; margin: 10px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center; top: 250px; left: 50%; transform: translateX(-50%); font-family: 'Quicksand', sans-serif; z-index: 10;">
+    Password incorrect
+    <div style="position: absolute; bottom: -10px; left: 50%; width: 20px; height: 20px; background: white; transform: translateX(-50%) rotate(45deg); box-shadow: 4px 4px 5px rgba(0,0,0,0.1);"></div>
+  </div>
+  <input type="text" id="passcodeInput" placeholder="Enter passcode" style="margin-bottom: 10px; padding: 10px; font-size: 16px; border: 2px solid #ccc; border-radius: 5px;">
+  <button id="submitPasscodeBtn">Submit</button>
+ </div>
+
+ <!-- Move topic selection outside of app div and into its own section -->
+ <div id="topicSelection" style="display: none; margin-top: 20px; text-align: center;">
+  <img src="title.png" alt="ClozeCat" style="max-width: 250px; margin-bottom: 15px;">
+  <h3>Select topics:</h3>
+  <div>
+    <label><input type="checkbox" id="allTopicsToggle"> All topics</label>
+  </div>
+  <div id="topicsList" style="margin: 10px 0;">
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Connectors"> Connectors</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Prepositions"> Prepositions</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Modal Verbs"> Modal Verbs</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Reported Speech"> Reported Speech</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Passive Voice"> Passive Voice</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Conditionals"> Conditionals</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Relative Pronouns"> Relative Pronouns</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Phrasal Verbs"> Phrasal Verbs</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Quantifiers"> Quantifiers</label>
+    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Auxiliary Verbs"> Auxiliary Verbs</label>
+  </div>
+  
+  <!-- Add sentence count input -->
+  <div style="margin: 15px 0;">
+    <label for="sentenceCountInput" style="display: block; margin-bottom: 5px; font-weight: bold;">How many sentences? (0-100)</label>
+    <input type="number" id="sentenceCountInput" min="1" max="100" value="20" style="padding: 8px; width: 100px; text-align: center; font-size: 16px; border: 2px solid #5cacee; border-radius: 5px;">
+  </div>
+  
+  <button id="startGameBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 16px;">Start Game</button>
+ </div>
+
+  <div id="app" style="display: none;">
+    <!-- Add restart button at the top -->
+    <button id="restartAppBtn" style="position: absolute; top: 10px; left: 10px; font-size: 18px; padding: 5px 10px; background: #5cacee; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 100;">↺ Restart</button>
+    
+    <img id="titleImg" src="title.png" alt="ClozeCat" />
+    <div id="speechBubble"></div>
+    <div id="thoughtBubble"></div>
+    <div id="charContainer">
+      <div id="exclamation">!</div>
+      <img id="charImg" src="waiting.png" alt="Character">
+    </div>
+    <div id="sentenceContainer">Loading...</div>
+    <form id="answerForm">
+      <input type="text" id="answerInput" placeholder="Type your answer…" autocomplete="off" required />
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    <button id="continueBtn">👉 Continue</button>
+    <div id="feedback"></div>
+    <div id="progress"></div>
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div style="position: relative; display: inline-block;">
+    <button id="hintBtn">🐾 Hint</button>
+    <div id="pawTap">🐾</div>
+    </div>
+    <button id="toggleSoundBtn">🎵 Sound: On</button>
+    <button id="restartBtn">🔁 Play Again</button>
+    
+    <!-- Moved the score counter here inside the white box and initially hidden -->
+    <div id="scoreCounter" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+      Correct Answers: <span id="correctCount">0</span> | Incorrect Answers: <span id="incorrectCount">0</span>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const passcodeInput = document.getElementById('passcodeInput');
+      const submitPasscodeBtn = document.getElementById('submitPasscodeBtn');
+      const startScreen = document.getElementById('startScreen');
+      const topicSelection = document.getElementById('topicSelection');
+      const allTopicsToggle = document.getElementById('allTopicsToggle');
+      const topicToggles = document.querySelectorAll('.topicToggle');
+      const startGameBtn = document.getElementById('startGameBtn');
+      const app = document.getElementById('app');
+      const passwordSpeechBubble = document.getElementById('passwordSpeechBubble');
+      const startCat = document.getElementById('startCat');
+      const restartAppBtn = document.getElementById('restartAppBtn');
+      const sentenceCountInput = document.getElementById('sentenceCountInput');
+
+      let selectedTopics = [];
+      let availableTopics = [];
+
+      // First, load the YAML data to get available topics
+      fetch('data.yaml')
+        .then(response => response.text())
+        .then(yamlText => {
+          const allSentences = jsyaml.load(yamlText);
+          
+          // Extract unique topics from the YAML data and convert to lowercase for consistent comparison
+          availableTopics = [...new Set(allSentences.map(sentence => 
+            sentence.topic ? sentence.topic.toLowerCase() : null).filter(Boolean))];
+          
+          console.log('Available topics from YAML:', availableTopics);
+          
+          // Debug each topic toggle and their availability
+          topicToggles.forEach(toggle => {
+            const toggleValue = toggle.value.toLowerCase();
+            console.log(`Topic: ${toggle.value}, Available: ${availableTopics.includes(toggleValue)}`);
+          });
+          
+          // Make sure all topics are properly enabled (only disable if truly not in YAML)
+          topicToggles.forEach(toggle => {
+            const toggleValue = toggle.value.toLowerCase();
+            if (!availableTopics.includes(toggleValue)) {
+              toggle.disabled = true;
+              toggle.parentElement.style.color = '#aaa';
+              toggle.parentElement.title = 'No sentences available for this topic';
+            }
+          });
+          
+          // If there are no available topics, disable all topics toggle
+          if (availableTopics.length === 0) {
+            allTopicsToggle.disabled = true;
+            allTopicsToggle.parentElement.style.color = '#aaa';
+            allTopicsToggle.parentElement.title = 'No topics available';
+          }
+        })
+        .catch(error => {
+          console.error('Error loading YAML data:', error);
+        });
+
+      // Handle passcode submission
+      submitPasscodeBtn.addEventListener('click', () => {
+        const passcode = passcodeInput.value.trim().toLowerCase();
+        if (passcode === 'fish') { // Replace 'fish' with the correct passcode
+          startScreen.style.display = 'none'; // Hide start screen
+          topicSelection.style.display = 'block'; // Show topic selection
+        } else {
+          passwordSpeechBubble.style.display = 'block';
+          startCat.src = 'sad.png'; // Change cat image to sad state
+          setTimeout(() => {
+            passwordSpeechBubble.style.display = 'none';
+            startCat.src = 'waiting.png'; // Revert cat image to waiting state
+          }, 2000);
+        }
+      });
+
+      // Handle "All topics" toggle
+      allTopicsToggle.addEventListener('change', (e) => {
+        const isChecked = e.target.checked;
+        topicToggles.forEach(toggle => {
+          // Only check/uncheck enabled toggles
+          if (!toggle.disabled) {
+            toggle.checked = isChecked;
+          }
+        });
+        
+        // Get all enabled topics when "All topics" is checked
+        selectedTopics = isChecked ? 
+          Array.from(topicToggles)
+            .filter(toggle => !toggle.disabled)
+            .map(toggle => toggle.value) : 
+          [];
+          
+        console.log('Selected topics after "All topics" toggle:', selectedTopics);
+      });
+
+      // Handle individual topic toggles
+      topicToggles.forEach(toggle => {
+        toggle.addEventListener('change', () => {
+          const checkedTopics = Array.from(topicToggles)
+            .filter(toggle => toggle.checked && !toggle.disabled)
+            .map(toggle => toggle.value);
+
+          selectedTopics = checkedTopics;
+          console.log('Selected topics after individual toggle:', selectedTopics);
+
+          // Uncheck "All topics" if not all enabled topics are selected
+          const enabledTopics = Array.from(topicToggles).filter(t => !t.disabled);
+          if (checkedTopics.length !== enabledTopics.length) {
+            allTopicsToggle.checked = false;
+          } else {
+            allTopicsToggle.checked = true;
+          }
+        });
+      });
+
+      // Start game button functionality
+      startGameBtn.addEventListener('click', () => {
+        if (selectedTopics.length === 0) {
+          alert('Please select at least one topic to start the game.');
+          return;
+        }
+
+        const sentenceCount = parseInt(sentenceCountInput.value, 10);
+        if (isNaN(sentenceCount) || sentenceCount < 1 || sentenceCount > 100) {
+          alert('Please enter a valid number of sentences between 1 and 100.');
+          return;
+        }
+
+        // Store the selected topics and sentence count in a global variable for the script.js to use
+        window.selectedTopics = selectedTopics;
+        window.sentenceCount = sentenceCount;
+        console.log('Selected Topics:', selectedTopics);
+        console.log('Number of selected topics:', selectedTopics.length);
+        console.log('Sentence Count:', sentenceCount);
+
+        // Hide topic selection and show game
+        topicSelection.style.display = 'none';
+        app.style.display = 'block';
+        
+        // Dispatch a custom event that script.js can listen for
+        const event = new CustomEvent('startGame');
+        document.dispatchEvent(event);
+      });
+
+      // Restart app button functionality
+      restartAppBtn.addEventListener('click', () => {
+        location.reload(); // Refresh the page to restart the app
+      });
+    });
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

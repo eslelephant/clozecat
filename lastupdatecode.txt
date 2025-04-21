@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ClozeCat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: #fdf5e6;
+      font-family: 'Quicksand', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+    #app {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      padding: 16px;
+      text-align: center;
+      margin: 12px;
+      position: relative;
+    }
+    #titleImg {
+      max-width: 220px;
+      width: 75%;
+      margin: -10px auto 10px;
+      display: block;
+    }
+    #speechBubble, #thoughtBubble {
+      position: absolute;
+      top: 140px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: white;
+      border: 2px solid #444;
+      max-width: 85%;
+      font-size: 0.95rem;
+      z-index: 10;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    #speechBubble::after, #thoughtBubble::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-style: solid;
+      border-width: 10px 10px 0 10px;
+      border-color: white transparent transparent transparent;
+      z-index: 1;
+    }
+    #speechBubble::before, #thoughtBubble::before {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-style: solid;
+      border-width: 12px 12px 0 12px;
+      border-color: #444 transparent transparent transparent;
+      z-index: 0;
+    }
+    #speechBubble.show, #thoughtBubble.show {
+      animation: fadeSlide 0.4s ease-out;
+      opacity: 1;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translate(-50%, 10px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
+    @keyframes bounceUp {
+      0%   { transform: translate(-50%, 0); }
+      30%  { transform: translate(-50%, -10px); }
+      50%  { transform: translate(-50%, 0); }
+      70%  { transform: translate(-50%, -5px); }
+      100% { transform: translate(-50%, 0); }
+    }
+    #charImg { width: 240px; height: 240px; margin: 0 auto; display: block; }
+    #sentenceContainer { font-size: 1.25rem; margin-bottom: 10px; line-height: 1.4; color: #444; min-height: 60px; }
+    #answerForm { display: flex; gap: 8px; margin-bottom: 8px; }
+    #answerInput { flex: 1; padding: 8px; font-size: 1rem; border: 2px solid #ccc; border-radius: 10px; }
+    button { padding: 8px 12px; font-size: 1rem; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s ease-in-out; background: #ddd; color: #333; }
+    button:hover { filter: brightness(1.05); }
+    button:active { transform: scale(0.95); }
+    button:disabled { opacity: 0.5; cursor: not-allowed;}
+
+    #submitBtn { background: #5cacee; color: #fff; }
+    #submitBtn:disabled { background: #ccc; cursor: default; }
+    #continueBtn { background: #5cacee; color: white; display: none; margin-top: 6px; }
+    #hintBtn { background: #5cacee; color: white; margin-top: 8px; }
+    #toggleSoundBtn { background: #e0e0e0; color: #444; margin-top: 10px; }
+    #restartBtn { background: #c5c5c5; color: white; margin-top: 10px; display: none; }
+    #feedback { font-weight: 600; height: 1.4em; margin-bottom: 6px; }
+    #progress { margin-top: 8px; font-size: 0.95rem; color: #666; }
+    #progressBar { height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+    #progressFill { height: 100%; width: 0%; background: #5cacee; transition: width 0.4s; }
+    #pawTap {
+  position: absolute;
+  bottom: 100%; /* just above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+  z-index: 10;
+  margin-bottom: 4px; /* spacing above the button */
+}
+
+@keyframes tapBounce {
+  0%   { transform: translate(-50%, 0) rotate(0deg); opacity: 0; }
+  20%  { transform: translate(-50%, -10px) rotate(0deg); opacity: 1; }
+  40%  { transform: translate(-50%, -5px) rotate(-10deg); }
+  60%  { transform: translate(-50%, -5px) rotate(10deg); }
+  80%  { transform: translate(-50%, -2px) rotate(-5deg); }
+  100% { transform: translate(-50%, 0) rotate(0deg); opacity: 0; }
+}
+
+
+ </style>
+</head>
+<body>
+ <div id="startScreen" style="text-align:center; padding: 60px 20px;">
+  <img src="title.png" alt="ClozeCat" style="width: 220px; max-width: 90%; margin-bottom: 20px;">
+  <img id="startCat" src="waiting.png" alt="ClozeCat" style="width: 220px; height: 220px; display: block; margin: 0 auto 20px;">
+  <button id="startBtn" style="
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    background: #5cacee;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+  ">Start</button>
+</div>
+
+
+
+  <div id="app" style="display: none;">
+    <img id="titleImg" src="title.png" alt="ClozeCat" />
+    <div id="speechBubble"></div>
+    <div id="thoughtBubble"></div>
+    <img id="charImg" src="waiting.png" alt="ClozeCat" />
+    <div id="sentenceContainer">Loading...</div>
+    <form id="answerForm">
+      <input type="text" id="answerInput" placeholder="Type your answer…" autocomplete="off" required />
+      <button type="submit" id="submitBtn">Submit</button>
+    </form>
+    <button id="continueBtn">👉 Continue</button>
+    <div id="feedback"></div>
+    <div id="progress"></div>
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div style="position: relative; display: inline-block;">
+    <button id="hintBtn">🐾 Hint</button>
+    <div id="pawTap">🐾</div>
+    </div>
+    <button id="toggleSoundBtn">🎵 Sound: On</button>
+    <button id="restartBtn">🔁 Play Again</button>
+  </div>
+
+  <!-- YAML data embedded directly in HTML -->
+  <script id="yaml-data" type="text/yaml">
+# Although at the start
+- sentence: ___ it was raining, we went for a hike.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ she’s allergic to cats, she adopted one!
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ I practice a lot, I still make mistakes.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ he was tired, he made an effort.  
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ the food looked strange, it tasted great.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ they didn’t study much, they passed.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ my phone was running low on battery, I made the call.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ we arrived on time, nobody else was there.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ he trained a lot, she didn’t win.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: ___ I’m shy, I spoke in front of the class.
+  answers: ["Although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: We went swimming, ___ the water was cold.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: He went to the party, ___ he didn’t want to.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: The film was fun, ___ it was a bit long.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: She did well, ___ she was nervous.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: I love travel, ___ I hate flying.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: He looked calm, ___ he was worried.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: We had fun, ___ the weather was bad.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: She won the race, ___ she fell at the start.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: The party was fun, ___ the music was too loud.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+- sentence: I tried to focus, ___ I kept thinking about food.
+  answers: ["although"]
+  hint: "Shows contrast."
+  explanation: "connector: although + clause"
+  topic: connectors
+
+</script>
+
+  <script>
+    const yamlRaw = document.getElementById('yaml-data').textContent;
+    const allSentences = jsyaml.load(yamlRaw);
+    const hintSound = new Audio('pop.mp3'); hintSound.volume = 0.3;
+    const correctSound = new Audio('correct.wav'); correctSound.volume = 0.3;
+    const incorrectSound = new Audio('incorrect.wav'); incorrectSound.volume = 0.3;
+    const wrongSound = new Audio('wrong.wav'); wrongSound.volume = 0.3;
+    const typeSound = new Audio('type.wav'); typeSound.loop = true; typeSound.volume = 0.25;
+    let soundEnabled = true;
+    let hintUsed = false;
+    const positiveMessages = ["Correct!","Yes!","Exactly!","Great!","Well done!","You've got this!","Nice one!"];
+
+    function shuffle(arr){return arr.slice().sort(()=>Math.random()-0.5);}
+    let sentences = shuffle(allSentences).slice(0,20);
+    let idx = 0, correctCount = 0, incorrectCount = 0, attempts = 0;
+    const charImg = document.getElementById('charImg');
+    const sentDiv = document.getElementById('sentenceContainer');
+    const form = document.getElementById('answerForm');
+    const input = document.getElementById('answerInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const toggleBtn = document.getElementById('toggleSoundBtn');
+    const speechBubble = document.getElementById('speechBubble');
+    const thoughtBubble = document.getElementById('thoughtBubble');
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progressFill');
+
+    function typeSentence(text, cb){
+      sentDiv.textContent = "";
+      charImg.src = 'typing.gif';
+      if(soundEnabled) typeSound.play();
+      let i=0, t=setInterval(()=>{
+        if(i<text.length) sentDiv.textContent += text[i++];
+        else {
+          clearInterval(t);
+          typeSound.pause();
+          charImg.src='waiting.png';
+          cb();
+        }
+      },40);
+    }
+
+    function load(){
+      attempts = 0;
+      hintUsed = false;
+      hintBtn.disabled = false;
+      hintBtn.textContent = '🐾 Hint';
+      speechBubble.style.display = thoughtBubble.style.display = 'none';
+      continueBtn.style.display = 'none';
+      restartBtn.style.display = 'none';
+      form.style.display = 'flex';
+      input.disabled = submitBtn.disabled = true;
+      input.value = "";
+
+      if(idx < sentences.length){
+        progress.textContent = `Sentence ${idx+1} of ${sentences.length}`;
+        progressFill.style.width = `${(idx/sentences.length)*100}%`;
+        typeSentence(sentences[idx].sentence, ()=>{
+          input.disabled = submitBtn.disabled = false;
+          input.focus();
+        });
+      } else {
+        form.style.display = 'none';
+        sentDiv.innerHTML =
+          `Game Over! 🎉<br><br>`+
+          `✅ Correct: ${correctCount}<br>`+
+          `❌ Missed: ${incorrectCount}<br>`+
+          `📊 Accuracy: ${Math.round((correctCount/sentences.length)*100)}%`;
+        progress.textContent = `Final Score: ${correctCount} / ${sentences.length}`;
+        progressFill.style.width = '100%';
+        restartBtn.style.display = 'inline-block';
+      }
+    }
+
+    function nextQuestion(){ idx++; load(); }
+
+    continueBtn.onclick = ()=>{ continueBtn.style.display='none'; nextQuestion(); };
+    restartBtn.onclick = ()=>{
+      idx=0; correctCount=incorrectCount=0;
+      sentences = shuffle(allSentences).slice(0,20);
+      load();
+    };
+    toggleBtn.onclick = ()=>{
+      soundEnabled = !soundEnabled;
+      toggleBtn.textContent = soundEnabled ? '🎵 Sound: On' : '🔇 Sound: Off';
+    };
+   hintBtn.onclick = () => {
+  if (!hintUsed && !hintBtn.disabled) {
+    speechBubble.textContent = sentences[idx].hint;
+    speechBubble.style.display = 'block';
+    speechBubble.classList.add('show');
+    if (soundEnabled) hintSound.play();
+    hintUsed = true;
+    hintBtn.disabled = true;
+    hintBtn.textContent = 'Hint Used 🐾';
+
+    // Animate the paw tap
+    const paw = document.getElementById('pawTap');
+    paw.style.animation = 'none';
+    paw.offsetHeight; // triggers reflow to restart animation
+    paw.style.animation = 'tapBounce 1s ease-out';
+  }
+};
+
+    form.addEventListener('submit', e => {
+  e.preventDefault();
+  const userAns = input.value.trim().toLowerCase();
+  const correctList = sentences[idx].answers.map(a => a.trim().toLowerCase()).filter(a => a);
+  const isCorrect = correctList.includes(userAns);
+
+  if (isCorrect) {
+    const color = attempts > 0 ? '#FFA500' : '#2ecc71';
+    let displayedAnswer = userAns;
+if (sentences[idx].sentence.trim().startsWith("___")) {
+  displayedAnswer = userAns.charAt(0).toUpperCase() + userAns.slice(1);
+}
+sentDiv.innerHTML = sentences[idx].sentence.replace("___", `<span style="color:${color}; font-weight:bold;">${displayedAnswer}</span>`);
+
+    const msg = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+    speechBubble.textContent = msg + " 🎉";
+    speechBubble.style.display = 'block';
+    speechBubble.classList.add('show');
+    if (soundEnabled) correctSound.play();
+    if (typeof confetti === 'function') confetti({ particleCount:100, spread:60, origin:{ y:0.6 }});
+    charImg.src = 'celebrate.png';
+    correctCount++;
+    input.disabled = submitBtn.disabled = true;
+    setTimeout(nextQuestion, 3000);
+  } else {
+    attempts++;
+    if (attempts === 1) {
+      if (soundEnabled) incorrectSound.play();
+      charImg.src = 'sad.png';
+      speechBubble.textContent = "Oops, try again!";
+      speechBubble.style.display = 'block';
+      speechBubble.classList.add('show');
+    } else {
+      if (soundEnabled) wrongSound.play();
+      charImg.src = 'defeat.png';
+      incorrectCount++;
+      input.disabled = submitBtn.disabled = true;
+      let correctWord = sentences[idx].answers[0];
+if (sentences[idx].sentence.trim().startsWith("___")) {
+  correctWord = correctWord.charAt(0).toUpperCase() + correctWord.slice(1);
+}
+sentDiv.innerHTML = sentences[idx].sentence.replace("___", `<span style="color:#FFA500; font-weight:bold;">${correctWord}</span>`);
+
+      thoughtBubble.textContent = sentences[idx].explanation;
+      thoughtBubble.style.display = 'block';
+      thoughtBubble.classList.add('show');
+      continueBtn.style.display = 'inline-block';
+      hintBtn.disabled = true;
+    }
+  }
+});
+
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){
+        e.preventDefault();
+        if(!submitBtn.disabled) form.requestSubmit();
+        else if(continueBtn.style.display!=='none') continueBtn.click();
+      }
+    });
+    document.querySelectorAll('button').forEach(btn=>{
+      btn.addEventListener('touchstart',()=>btn.style.transform='scale(0.95)');
+      btn.addEventListener('touchend',()=>btn.style.transform='scale(1)');
+    });
+    setInterval(()=>{
+      if(charImg.src.includes('waiting.png')){
+        charImg.src='blink.png';
+        setTimeout(()=>charImg.src='waiting.png',200);
+      }
+    },5000);
+document.addEventListener('DOMContentLoaded', () => {
+  const startBtn = document.getElementById('startBtn');
+  const startScreen = document.getElementById('startScreen');
+  const app = document.getElementById('app');
+  const startCat = document.getElementById('startCat');
+
+  // Sound setup
+  const meowSound = new Audio('meow.mp3');
+  meowSound.volume = 0.1;
+
+  // Try playing the meow after short delay
+  setTimeout(() => {
+    meowSound.play().catch(() => {
+      console.log('Autoplay blocked — will play on first click.');
+      document.body.addEventListener('click', () => {
+        meowSound.play().catch(() => {});
+      }, { once: true });
+    });
+  }, 400);
+
+  // Blink the start screen cat every 4 seconds
+  setInterval(() => {
+    if (startCat && startCat.src.includes('waiting.png')) {
+      startCat.src = 'blink.png';
+      setTimeout(() => {
+        startCat.src = 'waiting.png';
+      }, 200);
+    }
+  }, 4000);
+
+  // Start Game button logic
+  startBtn.onclick = () => {
+    startScreen.style.display = 'none';
+    app.style.display = 'block';
+    load();
+  };
+});
+
+  </script>
+</body>
+</html>

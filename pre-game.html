@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClozeCat B2 - Pre-Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #fdf6e3; /* Light beige background */
+      margin: 0;
+      padding: 0;
+      color: #333; /* Dark text color */
+    }
+    #title {
+      margin-top: 20px;
+      width: 300px;
+    }
+    #catContainer {
+      position: relative;
+      margin: 50px auto;
+      width: 200px;
+    }
+    #charImg {
+      width: 200px;
+    }
+    #speechBubble {
+      position: absolute;
+      top: 35px; /* Move the speech bubble up by 5px */
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff; /* White background for the speech bubble */
+      border: none; /* Removed the black border */
+      border-radius: 10px;
+      padding: 10px;
+      width: 250px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333; /* Dark text color */
+      display: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow for the bubble */
+      position: relative; /* Ensure the tail is part of the bubble */
+    }
+
+    #speechBubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; /* Position the tail below the bubble */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 10px solid #fff; /* Match the bubble's background color */
+    }
+
+    #passwordInput {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+      border: 2px solid #333; /* Dark border */
+      border-radius: 5px;
+      background-color: white; /* Set white background for the password box */
+      color: #333; /* Dark text color */
+    }
+    #passwordInput::placeholder {
+      color: #999; /* Light gray placeholder text */
+    }
+    #startBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4a94d6; /* Set blue background */
+	color: #FFFFFF; /* Set white text */
+      font-weight: bold; /* Make text bolder */
+      width: 150px; /* Make the button wider */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+    }
+    #startBtn:hover {
+      background-color: #45a049; /* Slightly darker green on hover */
+    }
+    #submitBtn {
+      width: 50px; /* Make the button square */
+      height: 50px; /* Make the button square */
+	background-color: #4a94d6; /* Set custom blue background */
+      color: white; /* Set white text */
+      border: none; /* Remove border */
+      border-radius: 10px; /* Add rounded corners */
+      cursor: pointer; /* Change cursor to pointer */
+    }
+  </style>
+</head>
+<body>
+  <img id="title" src="title.png" alt="ClozeCat B2 Title">
+  <div id="catContainer">
+    <div id="speechBubble">Welcome! What's the password?</div>
+    <img id="charImg" src="waiting.png" alt="Cat">
+  </div>
+  <div id="passwordForm">
+    <input type="text" id="passwordInput" placeholder="Enter password">
+    <button id="submitBtn">Submit</button>
+  </div>
+  <button id="startBtn">Start</button>
+
+  <script>
+    const charImg = document.getElementById('charImg');
+    const speechBubble = document.getElementById('speechBubble');
+    const passwordInput = document.getElementById('passwordInput');
+    const startBtn = document.getElementById('startBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Show the speech bubble initially
+    speechBubble.style.display = 'block';
+
+    // Cat blinking animation
+    setInterval(() => {
+      if (charImg.src.includes('waiting.png')) {
+        charImg.src = 'blink.png';
+        setTimeout(() => charImg.src = 'waiting.png', 200);
+      }
+    }, 5000);
+
+    // Function to validate the password
+    function validatePassword() {
+      const password = passwordInput.value.trim().toLowerCase();
+      if (password === 'fish') {
+        // Correct password
+        charImg.src = 'celebrate.png';
+        speechBubble.textContent = 'Password correct!';
+        startBtn.style.display = 'inline-block';
+      } else if (password.length > 0) {
+        // Incorrect password
+        charImg.src = 'sad.png';
+        speechBubble.textContent = 'Password incorrect!';
+        startBtn.style.display = 'none';
+      } else {
+        // Reset state
+        charImg.src = 'waiting.png';
+        speechBubble.textContent = "Welcome! What's the password?";
+        startBtn.style.display = 'none';
+      }
+    }
+
+    // Add event listener for the submit button
+    submitBtn.addEventListener('click', validatePassword);
+
+    // Add event listener for the Enter key
+    passwordInput.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        validatePassword();
+      }
+    });
+
+    // Start button functionality
+    startBtn.addEventListener('click', () => {
+      alert('Game starting...');
+      // Redirect to the main game page or perform other actions
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+- sentence: "She didn’t finish her homework, ___ she stayed up late playing video games."
+  answers: ["because", "", ""]
+  hint: "it’s a connector showing reason"
+  explanation: "'Because' introduces the cause of her action."
+  topic: "Connectors"
+
+- sentence: "He’s excited ___ starting his internship next week."
+  answers: ["about", "", ""]
+  hint: "it’s a preposition of topic/interest"
+  explanation: "'About' follows 'excited' to show what he feels enthusiastic for."
+  topic: "Prepositions"
+
+- sentence: "You ___ submit your application before the deadline."
+  answers: ["must", "", ""]
+  hint: "it’s a modal verb of obligation"
+  explanation: "'Must' + base verb expresses a strong necessity or rule."
+  topic: "Modal Verbs"
+
+- sentence: "She said she ___ meet us at the café at noon."
+  answers: ["would", "", ""]
+  hint: "it’s the past form of 'will' in reported speech"
+  explanation: "'Would' backshifts 'will' when reporting a future arrangement in the past."
+  topic: "Reported Speech"
+
+- sentence: "The new song ___ recorded by the band yesterday."
+  answers: ["was", "", ""]
+  hint: "it’s an auxiliary verb for passive voice"
+  explanation: "'Was' + past participle forms the past simple passive."
+  topic: "Passive Voice"
+
+- sentence: "If I ___ you, I’d take that opportunity immediately."
+  answers: ["were", "", ""]
+  hint: "it’s the verb in a second conditional"
+  explanation: "'Were' is used with 'I' in the if‑clause of a hypothetical second conditional."
+  topic: "Conditionals"
+
+- sentence: "The smartphone ___ she bought last month is already broken."
+  answers: ["that", "which", ""]
+  hint: "it’s a relative pronoun for objects"
+  explanation: "'Which/That' introduces a defining relative clause referring to the object 'smartphone.'"
+  topic: "Relative Pronouns"
+
+- sentence: "I’d like to ___ up smoking soon."
+  answers: ["give", "", ""]
+  hint: "it’s part of a phrasal verb"
+  explanation: "'Give up' (verb + particle) means to quit a habit or activity."
+  topic: "Phrasal Verbs"
+
+- sentence: "There were ___ people at the concert than we expected."
+  answers: ["fewer", "", ""]
+  hint: "it’s a quantifier comparing countable nouns"
+  explanation: "'Fewer' is used to compare a smaller number of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ you ever tried sushi before your trip to Japan?"
+  answers: ["Had", "", ""]
+  hint: "it’s an auxiliary verb for past perfect"
+  explanation: "'Had' + past participle forms the past perfect, used in questions about completed experiences."
+  topic: "Auxiliary Verbs"
+
+- sentence: "I wanted to join the tennis club, ___ I didn’t have time after school."
+  answers: ["although", "", ""]
+  hint: "it’s a connector showing contrast"
+  explanation: "'Although' introduces a contrast between two clauses."
+  topic: "Connectors"
+
+- sentence: "She checked her phone ___ the lecture to avoid missing messages."
+  answers: ["during", "", ""]
+  hint: "it’s a preposition of time"
+  explanation: "'During' indicates when something happens within a period."
+  topic: "Prepositions"
+
+- sentence: "You ___ apologise for arriving late to the class."
+  answers: ["should", "", ""]
+  hint: "it’s a modal verb expressing advice"
+  explanation: "'Should' + base verb expresses recommendation or advice."
+  topic: "Modal Verbs"
+
+- sentence: "She said she ___ ski when she was younger."
+  answers: ["could", "", ""]
+  hint: "it’s the past form of 'can' in reported speech"
+  explanation: "'Could' backshifts 'can' when reporting past ability."
+  topic: "Reported Speech"
+
+- sentence: "This piece of art ___ displayed in the school corridor."
+  answers: ["is", "", ""]
+  hint: "it’s an auxiliary verb for passive voice in the present"
+  explanation: "'Is' + past participle forms the present simple passive."
+  topic: "Passive Voice"
+
+- sentence: "If you study harder, you ___ pass the exam."
+  answers: ["will", "", ""]
+  hint: "it’s a modal verb in a first conditional"
+  explanation: "'Will' + base verb expresses the result in a first conditional."
+  topic: "Conditionals"
+
+- sentence: "The student ___ laptop was stolen reported it to the teacher."
+  answers: ["whose", "", ""]
+  hint: "it’s a relative pronoun showing possession"
+  explanation: "'Whose' introduces a relative clause indicating possession."
+  topic: "Relative Pronouns"
+
+- sentence: "Could you ___ off the lights when you leave the room?"
+  answers: ["turn", "", ""]
+  hint: "it’s the verb in the phrasal verb 'turn off'"
+  explanation: "'Turn off' means to deactivate something; 'turn' is the verb part."
+  topic: "Phrasal Verbs"
+
+- sentence: "There are ___ reasons to join the music club."
+  answers: ["several", "many", ""]
+  hint: "it’s a quantifier for a moderate number"
+  explanation: "'Several/Mant' indicates there are a lot of something"
+  topic: "Quantifiers"
+
+- sentence: "___ you know what time the bus arrives?"
+  answers: ["do", "", ""]
+  hint: "it’s an auxiliary verb for questions in simple present"
+  explanation: "'Do' is used to form questions in the simple present tense."
+  topic: "Auxiliary Verbs"
+
+- sentence: "You won’t pass the exam ___ you study regularly."
+  answers: ["unless", "", ""]
+  hint: "it’s a connector showing condition"
+  explanation: "'Unless' introduces the only condition under which you might pass."
+  topic: "Connectors"
+
+- sentence: "She couldn’t decide ___ pizza and pasta for dinner."
+  answers: ["between", "", ""]
+  hint: "it’s a preposition showing choice"
+  explanation: "'Between' is used to express a choice involving two items."
+  topic: "Prepositions"
+
+- sentence: "I ___ go to the party if I finish my homework early."
+  answers: ["might", "", ""]
+  hint: "it’s a modal verb of possibility"
+  explanation: "'Might' indicates a possible action in the future."
+  topic: "Modal Verbs"
+
+- sentence: "John said he ___ tired after staying up late."
+  answers: ["was", "", ""]
+  hint: "it’s the past form of 'be' in reported speech"
+  explanation: "'Was' backshifts 'am' when reporting speech in the past."
+  topic: "Reported Speech"
+
+- sentence: "This assignment must ___ completed by Monday."
+  answers: ["be", "", ""]
+  hint: "it’s an auxiliary verb for the passive"
+  explanation: "'Be' + past participle forms the passive voice."
+  topic: "Passive Voice"
+
+- sentence: "If I ___ known you were coming, I would have baked a cake."
+  answers: ["had", "", ""]
+  hint: "it’s the past perfect in a third conditional"
+  explanation: "'Had' is used in the 'if' clause of a third conditional."
+  topic: "Conditionals"
+
+- sentence: "The student to ___ I lent my notes passed the test."
+  answers: ["whom", "", ""]
+  hint: "it’s a relative pronoun for objects"
+  explanation: "'Whom' introduces a defining relative clause referring to the object."
+  topic: "Relative Pronouns"
+
+- sentence: "Please fill ___ this form before the interview."
+  answers: ["in", "", ""]
+  hint: "it’s a particle in the phrasal verb 'fill in'"
+  explanation: "'In' completes the phrasal verb 'fill in,' meaning to complete a form."
+  topic: "Phrasal Verbs"
+
+- sentence: "There aren’t ___ tickets left for the concert."
+  answers: ["many", "", ""]
+  hint: "it’s a quantifier for countable nouns"
+  explanation: "'Many' indicates a large number of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ you finish the group project on time?"
+  answers: ["Did", "", ""]
+  hint: "it’s an auxiliary verb for past simple questions"
+  explanation: "'Did' is used to form questions in the past simple tense."
+  topic: "Auxiliary Verbs"
+
+- sentence: "I spilled juice on my shirt, ___ I had to change it."
+  answers: ["so", "", ""]
+  hint: "it’s a connector showing result"
+  explanation: "'So' introduces the result of the first clause."
+  topic: "Connectors"
+
+- sentence: "___ the bad weather, the football match continued."
+  answers: ["despite", "", ""]
+  hint: "it’s a preposition showing concession"
+  explanation: "'Despite' means 'in spite of' and introduces a contrast."
+  topic: "Prepositions"
+
+- sentence: "She ___ be at home now; her car is in the driveway."
+  answers: ["may", "might", "could"]
+  hint: "it’s a modal verb of possibility"
+  explanation: "'May/Might/Could' expresses a logical possibility about the present."
+  topic: "Modal Verbs"
+
+- sentence: "He said he ___ help with the project next week."
+  answers: ["would", "", ""]
+  hint: "it’s the past form of 'will' in reported speech"
+  explanation: "'Would' backshifts 'will' when reporting a future intention."
+  topic: "Reported Speech"
+
+- sentence: "The exams have ___ graded by the teacher."
+  answers: ["been", "", ""]
+  hint: "it’s an auxiliary verb in the perfect passive"
+  explanation: "'Been' combines with 'have' to form the perfect passive voice."
+  topic: "Passive Voice"
+
+- sentence: "If you ___ need more help, just ask."
+  answers: ["should", "", ""]
+  hint: "it’s a modal in a conditional expressing advice"
+  explanation: "'Should' is used in the if‑clause of a conditional to give advice."
+  topic: "Conditionals"
+
+- sentence: "The play ___ we saw last night was hilarious."
+  answers: ["which", "that", ""]
+  hint: "it’s a relative pronoun for things"
+  explanation: "'Which' introduces a defining relative clause about an object."
+  topic: "Relative Pronouns"
+
+- sentence: "Don’t forget to ___ on your jacket; it’s chilly outside."
+  answers: ["put", "", ""]
+  hint: "it’s the verb in the phrasal verb 'put on'"
+  explanation: "'Put on' means to dress in; 'put' is the verb part of the phrasal verb."
+  topic: "Phrasal Verbs"
+
+- sentence: "There are ___ students who want to join the debate club."
+  answers: ["some", "", ""]
+  hint: "it’s a quantifier for an indefinite amount"
+  explanation: "'Some' indicates an unspecified but non‑zero number of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ you enjoying the new school year so far?"
+  answers: ["Are", "", ""]
+  hint: "it’s an auxiliary verb for present continuous questions"
+  explanation: "'Are' is used with a present participle to form a question in the present continuous."
+  topic: "Auxiliary Verbs"
+
+- sentence: "She enjoys maths, ___ her brother prefers history."
+  answers: ["whereas", "while", ""]
+  hint: "it’s a connector showing contrast"
+  explanation: "'Whereas/while' introduces a contrast between two clauses."
+  topic: "Connectors"
+
+- sentence: "We walked ___ the park to get to the cinema."
+  answers: ["across", "", ""]
+  hint: "it’s a preposition of place"
+  explanation: "'Across' indicates movement from one side to the other."
+  topic: "Prepositions"
+
+- sentence: "You ___ not use calculators in this section of the test."
+  answers: ["must", "", ""]
+  hint: "it’s a negative modal verb"
+  explanation: "'Mustn't' expresses prohibition."
+  topic: "Modal Verbs"
+
+- sentence: "She said she ___ unfamiliar with the new software."
+  answers: ["felt", "", ""]
+  hint: "it’s the past form of a feeling verb in reported speech"
+  explanation: "'Felt' backshifts 'feel' when reporting past speech."
+  topic: "Reported Speech"
+
+- sentence: "These articles ___ published last year."
+  answers: ["were", "", ""]
+  hint: "it’s an auxiliary verb for passive voice"
+  explanation: "'Were' + past participle forms the past simple passive for plural subjects."
+  topic: "Passive Voice"
+
+- sentence: "If you need help, you ___ ask the teacher."
+  answers: ["can", "", ""]
+  hint: "it’s a modal verb of ability/possibility"
+  explanation: "'Can' indicates permission or possibility."
+  topic: "Conditionals"
+
+- sentence: "The student ___ solved the problem first got a prize."
+  answers: ["who", "", ""]
+  hint: "it’s a relative pronoun for people"
+  explanation: "'Who' introduces a defining relative clause referring to a person."
+  topic: "Relative Pronouns"
+
+- sentence: "I need to look ___ different topics for my project."
+  answers: ["into", "", ""]
+  hint: "it’s a particle in a phrasal verb"
+  explanation: "'Look into' means to investigate; 'into' is the particle."
+  topic: "Phrasal Verbs"
+
+- sentence: "There was ___ excitement before the concert started."
+  answers: ["much", "", ""]
+  hint: "it’s a quantifier for uncountable nouns"
+  explanation: "'Much' indicates a large amount of something uncountable."
+  topic: "Quantifiers"
+
+- sentence: "____ they seen the new school play yet?"
+  answers: ["Have", "", ""]
+  hint: "it’s an auxiliary verb for present perfect questions"
+  explanation: "'Have' + past participle forms the present perfect in questions."
+  topic: "Auxiliary Verbs"
+
+- sentence: "He studied all night, ___ he struggled with the questions."
+  answers: ["yet", "", ""]
+  hint: "it’s a connector showing contrast"
+  explanation: "'Yet' introduces a contrast between two clauses."
+  topic: "Connectors"
+
+- sentence: "I'm really proud ___ you."
+  answers: ["of", "", ""]
+  hint: "it’s a preposition of relationship"
+  explanation: "'Of' follows 'proud' to indicate what someone feels pride in."
+  topic: "Prepositions"
+
+- sentence: "You ___ to arrive earlier for the audition."
+  answers: ["ought", "", ""]
+  hint: "it’s a modal verb expressing recommendation"
+  explanation: "'Ought' + infinitive expresses a strong recommendation."
+  topic: "Modal Verbs"
+
+- sentence: "She said she ___ arrive by train."
+  answers: ["would", "", ""]
+  hint: "it’s the past form of 'will' in reported speech"
+  explanation: "'Would' backshifts 'will' when reporting future events in the past."
+  topic: "Reported Speech"
+
+- sentence: "The project ___ been approved by the teacher."
+  answers: ["has", "", ""]
+  hint: "it’s an auxiliary verb in the perfect passive"
+  explanation: "'Has' + past participle + been forms the present perfect passive voice."
+  topic: "Passive Voice"
+
+- sentence: "If it ___ too noisy, we can't concentrate."
+  answers: ["is", "gets", ""]
+  hint: "it’s the verb in a first conditional"
+  explanation: "'Present simple used in the first conditional."
+  topic: "Conditionals"
+
+- sentence: "This is the café ___ we first met."
+  answers: ["where", "", ""]
+  hint: "it’s a relative pronoun for places"
+  explanation: "'Where' introduces a relative clause providing information about a place."
+  topic: "Relative Pronouns"
+
+- sentence: "They need to ___ up their new laptops tomorrow."
+  answers: ["set", "", ""]
+  hint: "it’s the verb in the phrasal verb 'set up'"
+  explanation: "'Set up' means to install or prepare; 'set' is the verb part."
+  topic: "Phrasal Verbs"
+
+- sentence: "___ of the students agreed with the teacher's suggestion."
+  answers: ["Most", "", ""]
+  hint: "it’s a quantifier for majority"
+  explanation: "'Most' indicates the majority of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ she finished her assignment yet?"
+  answers: ["Has", "", ""]
+  hint: "it’s an auxiliary verb for present perfect questions"
+  explanation: "'Has' + past participle forms the present perfect tense in questions for third person singular."
+  topic: "Auxiliary Verbs"
+
+- sentence: "We arrived early; ___, the event had already started."
+  answers: ["however", "nevertheless", ""]
+  hint: "it’s a connector showing contrast"
+  explanation: "'However' introduces a contrast between two clauses."
+  topic: "Connectors"
+
+- sentence: "She shared the snacks ___ her classmates."
+  answers: ["among", "amongst", ""]
+  hint: "it’s a preposition of distribution"
+  explanation: "'Among' indicates distribution within a group."
+  topic: "Prepositions"
+
+- sentence: "___ we leave now before the traffic gets worse?"
+  answers: ["Could", "Can", ""]
+  hint: "it’s a modal verb for suggestion"
+  explanation: "'Could/Can' expresses possibility/ideas."
+  topic: "Modal Verbs"
+
+- sentence: "He told me I ___ tidy my desk."
+  answers: ["should", "", ""]
+  hint: "it’s a modal verb in reported advice"
+  explanation: "'Should' remains unchanged when reporting advice."
+  topic: "Reported Speech"
+
+- sentence: "The museum ___ closed on Mondays."
+  answers: ["is", "", ""]
+  hint: "it’s an auxiliary verb for present simple passive"
+  explanation: "'Is' + past participle forms the present simple passive."
+  topic: "Passive Voice"
+
+- sentence: "If I ___ rich, I would travel the world."
+  answers: ["were", "", ""]
+  hint: "it’s the verb in a second conditional"
+  explanation: "'Were' is used in the if‑clause of a second conditional for hypotheticals."
+  topic: "Conditionals"
+
+- sentence: "I remember the day ___ we first met."
+  answers: ["when", "", ""]
+  hint: "it’s a relative pronoun for time"
+  explanation: "'When' introduces a relative clause referring to a time."
+  topic: "Relative Pronouns"
+
+- sentence: "I need to ___ up my room before guests arrive."
+  answers: ["tidy", "clean", "clear"]
+  hint: "it’s the verb in the phrasal verb 'tidy up'"
+  explanation: "'Tidy up' means to clean; 'tidy' is the verb part."
+  topic: "Phrasal Verbs"
+
+- sentence: "There’s very ___ time to finish all this in one day."
+  answers: ["little", "", ""]
+  hint: "it’s a quantifier for insufficient amount"
+  explanation: "'Little' indicates an insufficient amount of something uncountable."
+  topic: "Quantifiers"
+
+- sentence: "___ I allowed to leave early today?"
+  answers: ["Am", "", ""]
+  hint: "it’s an auxiliary verb in a passive question"
+  explanation: "'Am' + past participle forms a present simple passive question."
+  topic: "Auxiliary Verbs"
+
+- sentence: "___ it was getting late, we decided to head home."
+  answers: ["as", "", ""]
+  hint: "it’s a connector showing reason"
+  explanation: "'As' introduces the reason for the decision."
+  topic: "Connectors"
+
+- sentence: "She ran ___ the tunnel to avoid the rain."
+  answers: ["through", "", ""]
+  hint: "it’s a preposition of movement"
+  explanation: "'Through' indicates movement into one side and out the other."
+  topic: "Prepositions"
+
+- sentence: "You ___ finish your project tonight or face a penalty."
+  answers: ["needn't", "", ""]
+  hint: "it’s a negative modal of absence of necessity"
+  explanation: "'Needn't' expresses that something is not necessary."
+  topic: "Modal Verbs"
+
+- sentence: "He asked if I ___ undertood the new book.."
+  answers: ["had", "", ""]
+  hint: "it’s a past form in reported speech"
+  explanation: "'Liked' backshifts 'like' when reporting someone’s words."
+  topic: "Reported Speech"
+
+- sentence: "The painting is ___ displayed in the gallery until next week."
+  answers: ["being", "", ""]
+  hint: "it’s an auxiliary in continuous passive"
+  explanation: "'Being' + past participle forms the continuous passive voice."
+  topic: "Passive Voice"
+
+- sentence: "You ___ join the bonus session if you arrive by 5 PM."
+  answers: ["may", "", ""]
+  hint: "it’s a modal in a conditional for permission"
+  explanation: "'May' + base verb gives permission under a condition."
+  topic: "Conditionals"
+
+- sentence: "This is the boy ___ mobile phone was stolen."
+  answers: ["whose", "", ""]
+  hint: "it’s a relative pronoun showing possession"
+  explanation: "'Whose' introduces a clause indicating possession."
+  topic: "Relative Pronouns"
+
+- sentence: "We had to ___ off the meeting due to a power cut."
+  answers: ["call", "", ""]
+  hint: "it’s the verb in the phrasal verb 'call off'"
+  explanation: "'Call off' means to cancel; 'call' is the main verb."
+  topic: "Phrasal Verbs"
+
+- sentence: "Only a ___ of my friends came to the party."
+  answers: ["few", "", ""]
+  hint: "it’s a quantifier for a small number"
+  explanation: "'Few' indicates a small number of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ you join us for the movie after school?"
+  answers: ["Will", "", ""]
+  hint: "it’s an auxiliary verb for invitation"
+  explanation: "'Will' + base verb for invitations in the future."
+  topic: "Auxiliary Verbs"
+
+- sentence: "___ the concert sold out, we went for ice cream."
+  answers: ["Since", "As", ""]
+  hint: "it’s a connector showing reason"
+  explanation: "'Since' introduces the cause of the main clause."
+  topic: "Connectors"
+
+- sentence: "Careful! There is someone hiding ___ the door."
+  answers: ["Behind", "", ""]
+  hint: "it’s a preposition of place"
+  explanation: "'Behind' indicates position at the back of something."
+  topic: "Prepositions"
+
+- sentence: "Students ___ arrive early to get good seats."
+  answers: ["should", "", ""]
+  hint: "it’s a modal expressing advice"
+  explanation: "'Should' + base verb gives a recommendation."
+  topic: "Modal Verbs"
+
+- sentence: "He explained he ___ left his notes at home."
+  answers: ["Had", "", ""]
+  hint: "it’s the past perfect in reported speech"
+  explanation: "'Had' backshifts 'have' when reporting past actions."
+  topic: "Reported Speech"
+
+- sentence: "The walls have ___ painted recently."
+  answers: ["Been", "", ""]
+  hint: "it’s an auxiliary in the perfect passive"
+  explanation: "'Been' combines with 'have' to form the perfect passive."
+  topic: "Passive Voice"
+
+- sentence: "If you ___ warned me earlier, I could have helped you."
+  answers: ["Had", "", ""]
+  hint: "it’s the past perfect in a third conditional"
+  explanation: "'Had' is used in the if‑clause of a third conditional."
+  topic: "Conditionals"
+
+- sentence: "The workshop, ___ lasts two hours, is very popular."
+  answers: ["Which", "", ""]
+  hint: "it’s a relative pronoun for things"
+  explanation: "'Which' introduces a defining relative clause about an object."
+  topic: "Relative Pronouns"
+
+- sentence: "Please ___ down the volume; it’s too loud."
+  answers: ["Turn", "", ""]
+  hint: "it’s the verb in the phrasal verb 'turn down'"
+  explanation: "'Turn down' means to reduce volume; 'turn' is the verb part."
+  topic: "Phrasal Verbs"
+
+- sentence: "___ of the students passed the exam, so everyone was happy!"
+  answers: ["All", "", ""]
+  hint: "it’s a quantifier for the entirety"
+  explanation: "'All' indicates the total number of countable items."
+  topic: "Quantifiers"
+
+- sentence: "___ they been informed about the schedule?"
+  answers: ["Have", "", ""]
+  hint: "it’s an auxiliary for present perfect questions"
+  explanation: "'Have' + past participle forms a question in the present perfect."
+  topic: "Auxiliary Verbs"
+
+- sentence: "She missed the bus, ___ she walked to school."
+  answers: ["so", "", ""]
+  hint: "it’s a connector showing result"
+  explanation: "'So' introduces the result of the first clause."
+  topic: "Connectors"
+
+- sentence: "We sat ___ the fireplace to stay warm."
+  answers: ["by", "near", ""]
+  hint: "it’s a preposition of place"
+  explanation: "'By' indicates proximity to something."
+  topic: "Prepositions"
+
+- sentence: "You ___ ask permission before borrowing someone’s book."
+  answers: ["must", "", ""]
+  hint: "it’s a modal verb of obligation"
+  explanation: "'Must' + base verb expresses a strong necessity."
+  topic: "Modal Verbs"
+
+- sentence: "He told me he ___ already eaten lunch."
+  answers: ["had", "", ""]
+  hint: "it’s the past perfect in reported speech"
+  explanation: "'Had' backshifts 'have' when reporting past actions."
+  topic: "Reported Speech"
+
+- sentence: "The homework ___ completed by all the students on time."
+  answers: ["was", "", ""]
+  hint: "it’s an auxiliary verb for passive voice"
+  explanation: "'Was' + past participle forms the past simple passive."
+  topic: "Passive Voice"
+
+- sentence: "If she ___ arrived earlier, she would have caught the train."
+  answers: ["had", "", ""]
+  hint: "it’s the past perfect in a third conditional"
+  explanation: "'Had' is used in the if‑clause of a third conditional."
+  topic: "Conditionals"
+
+- sentence: "The film ___ won the award is now available online."
+  answers: ["that", "which", ""]
+  hint: "it’s a relative pronoun for objects"
+  explanation: "'That' introduces a defining relative clause referring to a thing."
+  topic: "Relative Pronouns"
+
+- sentence: "Don’t give ___ on your dreams."
+  answers: ["up", "", ""]
+  hint: "it’s a particle in a phrasal verb"
+  explanation: "'Up' completes the phrasal verb 'give up', meaning to quit."
+  topic: "Phrasal Verbs"
+
+- sentence: "There were ___ errors in his report."
+  answers: ["several", "many", ""]
+  hint: "it’s a quantifier for a moderate number"
+  explanation: "'Several' indicates more than two but not many."
+  topic: "Quantifiers"
+
+- sentence: "___ she ever visited Paris?"
+  answers: ["Has", "", ""]
+  hint: "it’s an auxiliary verb for present perfect questions"
+  explanation: "'Has' + past participle forms a question in the present perfect for third person singular."
+  topic: "Auxiliary Verbs"
+
+
+
+
+
+
+
+
+
+
+

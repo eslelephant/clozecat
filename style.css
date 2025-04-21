@@ -1,0 +1,239 @@
+body {
+  margin: 0;
+  background: #fdf5e6;
+  font-family: 'Quicksand', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10px;
+}
+#app {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  max-width: 400px;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  margin: 12px;
+  position: relative;
+}
+#titleImg {
+  max-width: 220px;
+  width: 75%;
+  margin: -10px auto 10px;
+  display: block;
+}
+#speechBubble, #thoughtBubble {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: white;
+  border: 2px solid #444;
+  max-width: 85%;
+  font-size: 0.95rem;
+  z-index: 10;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+#speechBubble::after, #thoughtBubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: white transparent transparent transparent;
+  z-index: 1;
+}
+#speechBubble::before, #thoughtBubble::before {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 12px 12px 0 12px;
+  border-color: #444 transparent transparent transparent;
+  z-index: 0;
+}
+#speechBubble.show, #thoughtBubble.show {
+  animation: fadeSlide 0.4s ease-out;
+  opacity: 1;
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translate(-50%, 10px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes bounceUp {
+  0%   { transform: translate(-50%, 0); }
+  30%  { transform: translate(-50%, -10px); }
+  50%  { transform: translate(-50%, 0); }
+  70%  { transform: translate(-50%, -5px); }
+  100% { transform: translate(-50%, 0); }
+}
+#charImg { width: 240px; height: 240px; margin: 0 auto; display: block; }
+#sentenceContainer { font-size: 1.25rem; margin-bottom: 10px; line-height: 1.4; color: #444; min-height: 60px; }
+#answerForm { display: flex; gap: 8px; margin-bottom: 8px; }
+#answerInput { flex: 1; padding: 8px; font-size: 1rem; border: 2px solid #ccc; border-radius: 10px; }
+
+/* Button styles */
+button {
+  background: #5cacee; /* Blue color for all buttons */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #4a94d6; /* Slightly darker blue on hover */
+}
+
+button:disabled {
+  background: #ccc; /* Gray for disabled buttons */
+  cursor: not-allowed;
+}
+
+/* Specific button styles */
+#restartBtn {
+  margin-top: 10px;
+  display: none; /* Initially hidden */
+}
+
+#toggleSoundBtn {
+  margin-top: 10px;
+}
+
+#submitBtn { 
+  background: #5cacee; /* Blue color for the button */
+  color: white;
+  border: none;
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#submitBtn:hover {
+  background: #4a94d6; /* Slightly darker blue on hover */
+}
+
+#submitBtn:disabled { background: #ccc; cursor: default; }
+#continueBtn { background: #5cacee; color: white; display: none; margin-top: 6px; }
+#hintBtn { background: #5cacee; color: white; margin-top: 8px; }
+#feedback { font-weight: 600; height: 1.4em; margin-bottom: 6px; }
+#progress { margin-top: 8px; font-size: 0.95rem; color: #666; }
+#progressBar { height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; margin-top: 6px; }
+#progressFill { height: 100%; width: 0%; background: #5cacee; transition: width 0.4s; }
+#pawTap {
+  position: absolute;
+  bottom: 100%; /* just above the button */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+  z-index: 10;
+  margin-bottom: 4px; /* spacing above the button */
+}
+
+@keyframes tapBounce {
+  0%   { transform: translate(-50%, 0) rotate(0deg); opacity: 0; }
+  20%  { transform: translate(-50%, -10px) rotate(0deg); opacity: 1; }
+  40%  { transform: translate(-50%, -5px) rotate(-10deg); }
+  60%  { transform: translate(-50%, -5px) rotate(10deg); }
+  80%  { transform: translate(-50%, -2px) rotate(-5deg); }
+  100% { transform: translate(-50%, 0) rotate(0deg); opacity: 0; }
+}
+
+/* Typing animation for speech bubble text */
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.typing-effect {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 0.8s steps(30, end) forwards;
+  width: 0;
+}
+
+/* Exclamation mark animation for incorrect answers */
+#exclamation {
+  position: absolute;
+  top: 160px; /* Moved higher from 170px */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.7rem;
+  font-weight: bold;
+  color: #ff3333;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+@keyframes popIn {
+  0%   { transform: translate(-50%, 0) scale(0.1); opacity: 0; }
+  30%  { transform: translate(-50%, 0) scale(1.2); opacity: 1; } /* Just pop up */
+  70%  { transform: translate(-50%, 0) scale(1.0); opacity: 1; } /* Hold briefly */
+  100% { transform: translate(-50%, 0) scale(0.8); opacity: 0; } /* Fade out quickly */
+}
+
+/* Start screen styles */
+#startScreen {
+  text-align: center; 
+  padding: 60px 20px;
+}
+
+#startScreen img[src="title.png"] {
+  max-width: 320px;
+  width: 90%;
+  margin-bottom: 20px;
+}
+
+#startCat {
+  width: 260px;
+  height: 260px;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+#startBtn {
+  font-size: 1.2rem;
+  padding: 12px 24px;
+  background: #5cacee;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+#passwordInput {
+  background-color: #fff; /* Add white background to the password box */
+  border: 2px solid #ccc; /* Match other input styles */
+  border-radius: 10px; /* Rounded corners */
+  padding: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
+#passwordForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Add spacing between the input and button */
+  margin-top: 20px;
+}
