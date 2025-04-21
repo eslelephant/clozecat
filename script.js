@@ -53,11 +53,101 @@ function initializeGame(allSentences) {
   window.incorrectCount = 0;
   
   const hintSound = new Audio('meow.mp3'); hintSound.volume = 0.08; // Reduced volume from 0.15 to 0.08
-  const correctSound = new Audio('correct.wav'); correctSound.volume = 0.3;
+  const correctSound = new Audio('correct.wav'); correctSound.volume = 0.8; // Set to 80% volume
+  const harpSound = new Audio('harp.wav'); harpSound.volume = 0.9; // Set to 90% volume
   const incorrectSound = new Audio('incorrect.wav'); incorrectSound.volume = 0.3;
   const wrongSound = new Audio('wrong.wav'); wrongSound.volume = 0.3;
   const typeSound = new Audio('type.wav'); typeSound.loop = true; typeSound.volume = 0.25;
   const meowSound = new Audio('meow.mp3'); meowSound.volume = 0.1;
+  
+  // Frame-based animation parameters and variables
+  const typingFrames = ['type2.png', 'type3.png', 'type4.png']; // Removed type1.png from sequence
+  let frameIndex = 0;
+  let animationInterval;
+  const frameDelay = 150; // milliseconds between frames (adjust for speed)
+  
+  // Chat animation variables and frames
+  const chatFrames = ['chat1.png', 'chat2.png', 'chat3.png'];
+  let chatFrameIndex = 0;
+  let chatAnimationInterval;
+  const chatFrameDelay = 150; // milliseconds between chat frames
+  
+  // Function to animate cat talking using individual frames
+  function animateCatTalking(imgElement, duration = 800) {
+    // Clear any existing animation
+    if (chatAnimationInterval) {
+      clearInterval(chatAnimationInterval);
+      chatAnimationInterval = null;
+    }
+    
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+    
+    // Reset to first frame
+    chatFrameIndex = 0;
+    imgElement.src = chatFrames[chatFrameIndex];
+    
+    // Create animation interval that cycles through frames
+    chatAnimationInterval = setInterval(() => {
+      chatFrameIndex = (chatFrameIndex + 1) % chatFrames.length;
+      imgElement.src = chatFrames[chatFrameIndex];
+    }, chatFrameDelay);
+    
+    // If duration is provided, stop the animation after that time
+    if (duration > 0) {
+      setTimeout(() => {
+        if (chatAnimationInterval) {
+          clearInterval(chatAnimationInterval);
+          chatAnimationInterval = null;
+          imgElement.src = 'catstill.png';
+        }
+      }, duration);
+    }
+    
+    return chatAnimationInterval;
+  }
+  
+  // Function to stop the chat animation
+  function stopChatAnimation() {
+    if (chatAnimationInterval) {
+      clearInterval(chatAnimationInterval);
+      chatAnimationInterval = null;
+    }
+  }
+  
+  // Function to animate cat using individual frames
+  function animateCatTyping(imgElement, isPlaying = true) {
+    // Clear any existing animation
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+    
+    // If not playing animation, just return
+    if (!isPlaying) return;
+    
+    // Reset to first frame
+    frameIndex = 0;
+    imgElement.src = typingFrames[frameIndex];
+    
+    // Create animation interval that cycles through frames
+    animationInterval = setInterval(() => {
+      frameIndex = (frameIndex + 1) % typingFrames.length;
+      imgElement.src = typingFrames[frameIndex];
+    }, frameDelay);
+    
+    return animationInterval;
+  }
+  
+  // Function to stop the frame animation
+  function stopCatAnimation() {
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+  }
   
   let soundEnabled = true;
   let hintUsed = false;
@@ -139,9 +229,9 @@ function initializeGame(allSentences) {
     bubble.style.display = 'block';
     bubble.classList.add('show');
     
-    // Change cat to speaking animation if not already sad
+    // Change cat to talking animation if not already in a special state
     if (!keepCatState) {
-      charImg.src = 'speak.gif';
+      animateCatTalking(charImg);
     }
     
     // Set timeout for when animation completes (matching the CSS animation duration)
@@ -149,7 +239,7 @@ function initializeGame(allSentences) {
     setTimeout(() => {
       // Return cat to previous state if not keeping current state
       if (!keepCatState) {
-        charImg.src = 'waiting.png';
+        charImg.src = 'catstill.png';
       }
       
       // Execute callback if provided
@@ -159,19 +249,24 @@ function initializeGame(allSentences) {
     }, animationDuration);
   }
 
-  function typeSentence(text, cb){
+  function typeSentence(text, cb) {
     sentDiv.textContent = "";
-    charImg.src = 'typing.gif';
-    if(soundEnabled) typeSound.play();
-    let i=0, t=setInterval(()=>{
-      if(i<text.length) sentDiv.textContent += text[i++];
+    
+    // Start the frame-based typing animation
+    animateCatTyping(charImg, true);
+    
+    if (soundEnabled) typeSound.play();
+    let i = 0, t = setInterval(() => {
+      if (i < text.length) sentDiv.textContent += text[i++];
       else {
         clearInterval(t);
         typeSound.pause();
-        charImg.src='waiting.png';
+        // Stop the typing animation
+        stopCatAnimation();
+        charImg.src = 'catstill.png';
         cb();
       }
-    },40);
+    }, 40);
   }
 
   function load(){
@@ -217,65 +312,7 @@ function initializeGame(allSentences) {
       updateFooter();
       
       // End-game animations based on score
-      if (correctCount > incorrectCount) {
-        // More correct answers - celebration animation
-        charImg.src = 'celebrate.png';
-        if (typeof confetti === 'function') {
-          confetti({
-            particleCount: 200,
-            spread: 90,
-            origin: { y: 0.4 },
-            gravity: 0.5,
-            startVelocity: 35
-          });
-          
-          // Add a second confetti burst after a short delay
-          setTimeout(() => {
-            confetti({
-              particleCount: 150,
-              spread: 70,
-              origin: { y: 0.6 }
-            });
-          }, 700);
-        }
-      } else {
-        // More incorrect answers - defeat animation
-        charImg.src = 'defeat.png';
-        if (typeof confetti === 'function') {
-          const rainColors = ['#99ccff', '#1a75ff', '#0052cc']; // Blue shades for rain
-          confetti({
-            particleCount: 80,
-            angle: 90,
-            spread: 60,
-            origin: { y: -0.1, x: 0.5 },
-            gravity: 1.2,
-            drift: 0,
-            ticks: 400,
-            shapes: ['circle'],
-            colors: rainColors,
-            scalar: 0.8,
-            zIndex: 5
-          });
-          let rainInterval = setInterval(() => {
-            confetti({
-              particleCount: 20,
-              angle: 90,
-              spread: 55,
-              origin: { y: -0.1, x: 0.5 },
-              gravity: 1.2,
-              drift: 0.2,
-              ticks: 300,
-              shapes: ['circle'],
-              colors: rainColors,
-              scalar: 0.7,
-              zIndex: 5
-            });
-          }, 600);
-          setTimeout(() => {
-            clearInterval(rainInterval);
-          }, 5000);
-        }
-      }
+      handleGameOver();
     }
   }
 
@@ -322,6 +359,9 @@ function initializeGame(allSentences) {
         typeSound.pause();
         typeSound.currentTime = 0;
         
+        // Stop any running animation
+        stopCatAnimation();
+        
         // Reset game state
         idx = 0;
         correctCount = 0;
@@ -356,7 +396,7 @@ function initializeGame(allSentences) {
         sentences = shuffle(filteredSentences).slice(0, currentSentenceCount);
         
         // Start the game at the beginning
-        charImg.src = 'waiting.png';
+        charImg.src = 'catstill.png';
         load();
       })
       .catch(error => {
@@ -382,7 +422,9 @@ function initializeGame(allSentences) {
       // Use the new animation function instead of direct text assignment
       animateSpeechBubble(speechBubble, sentences[idx].hint);
       
-      if (soundEnabled) hintSound.play();
+      // Use playRandomCatSound instead of hintSound
+      if (soundEnabled) playRandomCatSound();
+      
       hintUsed = true;
       hintBtn.disabled = true;
       hintBtn.textContent = 'Hint Used 🐾';
@@ -404,49 +446,7 @@ function initializeGame(allSentences) {
     const isCorrect = correctList.includes(userAns);
 
     if (isCorrect) {
-      // Correct answer handling
-      const color = attempts > 0 ? '#FFA500' : '#2ecc71';
-      let displayedAnswer = userAns;
-      if (sentences[idx].sentence.trim().startsWith("___")) {
-        displayedAnswer = userAns.charAt(0).toUpperCase() + userAns.slice(1);
-      }
-      sentDiv.innerHTML = sentences[idx].sentence.replace("___", `<span style="color:${color}; font-weight:bold;">${displayedAnswer}</span>`);
-
-      correctCount++;
-      consecutiveCorrect++; // Increment consecutive correct counter
-      updateFooter(); // Update the footer display
-
-      // Check if user got three in a row
-      if (consecutiveCorrect === 3) {
-        const msg = "Three in a row! 🔥";
-        animateSpeechBubble(speechBubble, msg);
-        if (typeof confetti === 'function') {
-          confetti({ 
-            particleCount: 150, 
-            spread: 70, 
-            origin: { y: 0.6 },
-            colors: ['#FF5722', '#FFA000', '#FFD600'] // Fire colors
-          });
-        }
-      } else {
-        const msg = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
-        // Use the animation function for the message
-        animateSpeechBubble(speechBubble, msg + " 🎉");
-      }
-      
-      if (soundEnabled) {
-        // Make sure the sound has reset before playing
-        correctSound.pause();
-        correctSound.currentTime = 0;
-        correctSound.play();
-      }
-      
-      if (consecutiveCorrect !== 3 && typeof confetti === 'function') {
-        confetti({ particleCount:100, spread:60, origin:{ y:0.6 }});
-      }
-      charImg.src = 'celebrate.png';
-      input.disabled = submitBtn.disabled = true;
-      setTimeout(nextQuestion, 2000); // Increased delay from 1500ms to 2000ms
+      handleCorrectAnswer();
     } else {
       attempts++;
       consecutiveCorrect = 0; // Reset consecutive correct counter on wrong answer
@@ -460,8 +460,8 @@ function initializeGame(allSentences) {
           incorrectSound.play();
         }
         
-        // Set the cat image to sad.png
-        charImg.src = 'sad.png';
+        // Set the cat image to catincorrect.png
+        charImg.src = 'catincorrect.png';
         
         // Clear the input field to let the user try again
         input.value = '';
@@ -490,8 +490,8 @@ function initializeGame(allSentences) {
           wrongSound.play();
         }
         
-        // Change cat image to defeat
-        charImg.src = 'defeat.png';
+        // Change cat image to catdefeat.png
+        charImg.src = 'catdefeat.png';
         incorrectCount++;
         updateFooter();
 
@@ -532,35 +532,143 @@ function initializeGame(allSentences) {
 
   // Cat blinking animation
   setInterval(() => {
-    if(charImg.src.includes('waiting.png')){
-      charImg.src = 'blink.png';
-      setTimeout(() => charImg.src = 'waiting.png', 200);
+    if(charImg.src.includes('catstill.png')){
+      charImg.src = 'catblink.png';
+      setTimeout(() => charImg.src = 'catstill.png', 200);
     }
   }, 5000);
 
-  // Add click event listener to the cat image
+  // Function to play a random cat sound
+  function playRandomCatSound() {
+    // Use only the catr*.wav and catmeow2.wav files, removed meow.mp3
+    const catSounds = ['catr2.wav', 'catr3.wav', 'catr4.wav', 'catr5.wav', 'catr6.wav', 'catmeow2.wav'];
+    const randomSound = catSounds[Math.floor(Math.random() * catSounds.length)];
+    const audio = new Audio(randomSound);
+    audio.volume = 0.18; // Increased by 20% from 0.15 to 0.18
+    return audio.play();
+  }
+
+  // Add click event listener to the cat image for meow and animation only (no hint)
   charImg.addEventListener('click', () => {
-    // Change the cat image to speaking animation
-    charImg.src = 'speak.gif';
+    // Only respond if the cat is in waiting state to avoid interrupting other animations
+    if(charImg.src.includes('catstill.png') || charImg.src.includes('catblink.png')) {
+      // Change the cat image to speaking animation
+      animateCatTalking(charImg);
 
-    // Play the meow sound
-    meowSound.play()
-      .then(() => {
-        // After the sound finishes, revert to the waiting image
+      // Play a random cat sound if sound is enabled
+      if (soundEnabled) {
+        // Use the existing playRandomCatSound function to play a random cat sound
+        playRandomCatSound()
+          .then(() => {
+            // After the sound finishes (or a short delay), revert to waiting image
+            setTimeout(() => {
+              if (!charImg.src.includes('cathappy.png') && 
+                  !charImg.src.includes('type2.png') && 
+                  !charImg.src.includes('type3.png') && 
+                  !charImg.src.includes('type4.png') && 
+                  !charImg.src.includes('catincorrect.png') && 
+                  !charImg.src.includes('catdefeat.png')) {
+                charImg.src = 'catstill.png';
+              }
+            }, 700); // Match to sound duration
+          })
+          .catch(error => {
+            console.error('Error playing sound:', error);
+            // Still revert animation after a delay if sound fails
+            setTimeout(() => {
+              if (!charImg.src.includes('cathappy.png') && 
+                  !charImg.src.includes('type2.png') && 
+                  !charImg.src.includes('type3.png') && 
+                  !charImg.src.includes('type4.png') && 
+                  !charImg.src.includes('catincorrect.png') && 
+                  !charImg.src.includes('catdefeat.png')) {
+                charImg.src = 'catstill.png';
+              }
+            }, 700);
+          });
+      } else {
+        // If sound is disabled, just animate for a moment
         setTimeout(() => {
-          charImg.src = 'waiting.png';
-
-          // Display the grammar explanation in the thought bubble
-          thoughtBubble.textContent = sentences[idx].explanation; // Ensure explanation is displayed
-          thoughtBubble.style.display = 'block';
-          thoughtBubble.classList.add('show');
-        }, 700); // Adjust this duration to match the sound length
-      })
-      .catch(error => {
-        console.error('Error playing sound:', error);
-      });
+          if (!charImg.src.includes('cathappy.png') && 
+              !charImg.src.includes('type2.png') && 
+              !charImg.src.includes('type3.png') && 
+              !charImg.src.includes('type4.png') && 
+              !charImg.src.includes('catincorrect.png') && 
+              !charImg.src.includes('catdefeat.png')) {
+            charImg.src = 'catstill.png';
+          }
+        }, 700);
+      }
+    }
   });
-
+  
   // Start the game
   load();
+}
+
+function handleCorrectAnswer() {
+  const userAns = input.value.trim().toLowerCase();
+  const color = attempts > 0 ? '#FFA500' : '#2ecc71';
+  let displayedAnswer = userAns;
+  if (sentences[idx].sentence.trim().startsWith("___")) {
+    displayedAnswer = userAns.charAt(0).toUpperCase() + userAns.slice(1);
+  }
+  sentDiv.innerHTML = sentences[idx].sentence.replace("___", `<span style="color:${color}; font-weight:bold;">${displayedAnswer}</span>`);
+
+  correctCount++;
+  consecutiveCorrect++; // Increment consecutive correct counter
+  updateFooter(); // Update the footer display
+
+  // Check if user got three in a row
+  if (consecutiveCorrect === 3) {
+    const msg = "Three in a row! 🔥";
+    animateSpeechBubble(speechBubble, msg);
+    if (typeof confetti === 'function') {
+      confetti({ 
+        particleCount: 150, 
+        spread: 70, 
+        origin: { y: 0.6 },
+        colors: ['#FF5722', '#FFA000', '#FFD600'] // Fire colors
+      });
+    }
+  } else {
+    const msg = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+    // Use the animation function for the message
+    animateSpeechBubble(speechBubble, msg + " 🎉");
+  }
+  
+  if (soundEnabled) {
+    // Make sure the sound has reset before playing
+    correctSound.pause();
+    correctSound.currentTime = 0;
+    correctSound.play().catch(e => console.log("Couldn't play correct sound: ", e));
+  }
+  
+  if (consecutiveCorrect !== 3 && typeof confetti === 'function') {
+    confetti({ particleCount:100, spread:60, origin:{ y:0.6 }});
+  }
+  charImg.src = 'cathappy.png';
+  input.disabled = submitBtn.disabled = true;
+  setTimeout(nextQuestion, 2000); // Increased delay from 1500ms to 2000ms
+}
+
+function handleGameOver() {
+  // Get final scores
+  const correctCount = parseInt(document.getElementById('correctCount').textContent);
+  const incorrectCount = parseInt(document.getElementById('incorrectCount').textContent);
+  
+  // Play harp sound if player has more correct than incorrect answers
+  if (correctCount > incorrectCount) {
+    harpSound.currentTime = 0;
+    harpSound.play().catch(e => console.log("Couldn't play harp sound: ", e));
+    
+    // You could also add some visual celebration here
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+  
+  // Rest of your game over handling code...
 }

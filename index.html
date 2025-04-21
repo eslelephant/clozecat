@@ -8,95 +8,640 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Quick resize for mobile optimization */
+    #startScreen img:first-child {
+      width: 75%; /* 25% smaller */
+      max-width: 187px; /* 25% smaller from typical 250px */
+      margin-bottom: 20px; /* Added more margin to compensate for removed cat */
+    }
+    
+    #startButton {
+      padding: 12px 24px !important;
+      font-size: 14px !important;
+      background: #5cacee;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+      position: relative; /* Added position relative */
+      z-index: 1;
+    }
+    
+    #startButton:hover {
+      background: #4a94d6;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    
+    #topicSelection img {
+      max-width: 187px !important; /* 25% smaller from 250px */
+      margin-bottom: 11px !important;
+    }
+    
+    #topicSelection h3 {
+      font-size: 16px !important;
+      margin: 7px 0 !important;
+    }
+    
+    #topicsList label {
+      margin: 4px !important;
+      font-size: 12px !important;
+    }
+    
+    #sentenceCountInput {
+      padding: 6px !important;
+      width: 75px !important;
+      font-size: 12px !important;
+    }
+    
+    /* Make sure elements maintain appropriate spacing */
+    #topicSelection {
+      margin-top: 15px !important;
+    }
+    
+    #topicsList {
+      margin: 7px 0 !important;
+    }
+    
+    /* Main app resizing (25% reduction) */
+    #app {
+      padding: 15px !important; /* 25% smaller from 20px */
+      max-width: 360px !important; /* Mobile-optimized width */
+      width: 95% !important; /* Fill available width on mobile */
+      margin: 5px auto !important; /* Center horizontally with minimal vertical margin */
+      box-sizing: border-box !important; /* Include padding in width calculation */
+      position: relative !important; /* Ensure proper positioning context */
+    }
+    
+    #titleImg {
+      max-width: 165px !important; /* 25% smaller from 220px */
+    }
+    
+    #charContainer {
+      position: relative !important;
+      z-index: 2 !important; /* Ensure cat appears above other elements */
+      margin-bottom: -15px !important; /* Reduced overlap with elements below */
+      height: 90px !important; /* Increased fixed height for container */
+    }
+    
+    #charImg {
+      width: 90px !important; /* Further reduced from 120px */
+      height: 90px !important; /* Further reduced from 120px */
+      object-fit: contain;
+      position: relative;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    #sentenceContainer {
+      position: relative !important;
+      z-index: 1 !important; /* Position below the cat */
+      font-size: 0.9rem !important; /* Slightly reduced font size */
+      min-height: 40px !important; /* Reduced height */
+      padding: 10px !important; /* Slightly reduced padding */
+      padding-top: 15px !important; /* Reduced top padding */
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: normal !important; /* Allow text to wrap */
+      max-width: 100% !important; /* Ensure it stays within container */
+      background-color: rgba(255, 255, 255, 0.95) !important; /* Slightly transparent background */
+      border-radius: 8px !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+      margin-top: 10px !important; /* More space between cat and text box */
+      margin-bottom: 15px !important; /* Add space below the text box */
+    }
+    
+    #answerInput {
+      padding: 8px !important; /* Slightly smaller padding */
+      font-size: 0.75rem !important;
+      width: 110px !important; /* Slightly wider for better usability */
+      max-width: 110px !important;
+      flex: none !important;
+      border-radius: 6px !important;
+      border: 1px solid #ddd !important;
+    }
+    
+    /* Update answer form to center elements */
+    #answerForm {
+      display: flex;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 6px;
+      margin: 15px 0 !important; /* Increased vertical margin */
+    }
+    
+    #submitBtn {
+      padding: 8px 12px !important; /* Slightly smaller padding */
+      font-size: 0.75rem !important;
+      border-radius: 6px !important;
+      background-color: #5cacee !important;
+      color: white !important;
+      border: none !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+    
+    #speechBubble, #thoughtBubble {
+      top: 70px !important; /* Reduced from 105px to match smaller cat */
+      padding: 8px 12px !important; /* Smaller padding */
+      font-size: 0.65rem !important; /* Smaller font size */
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: normal !important;
+      max-width: 80% !important; /* Slightly narrower for better styling */
+    }
+    
+    #exclamation {
+      top: 120px !important; /* 25% smaller from 160px */
+      font-size: 2rem !important; /* 25% smaller from 2.7rem */
+    }
+    
+    #scoreCounter {
+      margin-top: 11px !important; /* 25% smaller from 15px */
+      padding-top: 7px !important; /* 25% smaller from 10px */
+      font-size: 0.75rem !important; /* 25% smaller */
+    }
+    
+    #progressBar {
+      height: 7px !important; /* 25% smaller from 10px */
+      margin-top: 7px !important; /* 25% smaller from 10px */
+    }
+    
+    #feedback {
+      height: auto !important; /* Allow height to adjust to content */
+      min-height: 1.05em !important; /* Minimum height */
+      margin: 7px 0 !important; /* 25% smaller from 10px 0 */
+      padding: 6px !important; /* 25% smaller from 8px */
+      font-size: 0.75rem !important; /* 25% smaller */
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+      white-space: normal !important;
+      max-width: 100% !important;
+    }
+    
+    #restartAppBtn {
+      font-size: 14px !important; /* 25% smaller from 18px */
+      padding: 4px 8px !important; /* 25% smaller from 5px 10px */
+    }
+    
+    /* Card styling for app screens */
+    .app-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      text-align: center;
+      margin: 0 auto;
+      max-width: 95%;
+      width: 360px;
+      box-sizing: border-box;
+    }
+    
+    /* Media query specifically for small mobile devices */
+    @media (max-width: 380px) {
+      .app-card, #app {
+        max-width: 98% !important;
+        padding: 12px !important;
+      }
+      
+      #charImg {
+        width: 150px !important;
+        height: auto !important;
+        max-height: 150px !important;
+      }
+      
+      #charContainer {
+        margin-bottom: -25px !important; /* Adjust overlap for smaller screens */
+      }
+      
+      #sentenceContainer {
+        margin-top: -15px !important;
+      }
+      
+      #answerInput {
+        width: 90px !important;
+        max-width: 90px !important;
+        padding: 7px !important;
+      }
+      
+      button {
+        padding: 7px 12px !important;
+        font-size: 0.7rem !important;
+      }
+      
+      #titleImg {
+        max-width: 140px !important;
+      }
+      
+      #sentenceContainer {
+        font-size: 0.85rem !important;
+        padding: 8px !important;
+      }
+    }
+
+    .custom-button-container {
+      display: inline-block;
+      margin-top: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    #customStartButton {
+      background-color: transparent !important;
+      background-image: url('startbutton.png') !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      background-size: contain !important;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      width: auto;
+      min-width: 120px;
+      height: 45px;
+      cursor: pointer;
+      border: none !important;
+      outline: none !important;
+      padding: 0 !important;
+    }
+
+    #customStartButton:hover {
+      transform: translateY(-2px) scale(1.05); /* Pop up slightly and grow slightly */
+      filter: brightness(1.2); /* Highlight effect */
+      background-color: transparent !important;
+      border: none !important;
+      outline: none !important;
+    }
+
+    #customStartButton:active {
+      transform: translateY(0) scale(1);
+      filter: brightness(1);
+      background-color: transparent !important;
+      border: none !important;
+      outline: none !important;
+    }
+  </style>
 </head>
 <body>
- <div id="startScreen">
-  <img src="title.png" alt="ClozeCat">
-  <img id="startCat" src="waiting.png" alt="ClozeCat">
-  <div id="passwordSpeechBubble" style="display: none; position: absolute; background: white; border-radius: 20px; padding: 15px; max-width: 200px; margin: 10px auto; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center; top: 250px; left: 50%; transform: translateX(-50%); font-family: 'Quicksand', sans-serif; z-index: 10;">
-    Password incorrect
-    <div style="position: absolute; bottom: -10px; left: 50%; width: 20px; height: 20px; background: white; transform: translateX(-50%) rotate(45deg); box-shadow: 4px 4px 5px rgba(0,0,0,0.1);"></div>
+ <div id="startScreen" class="app-card">
+  <img src="title.png" alt="ClozeCat" style="width: 75%; max-width: 187px; margin-bottom: 10px;">
+  
+  <!-- Cat animation sequence container -->
+  <div id="startCatAnimation" style="height: 120px; width: 120px; margin: 5px auto 15px; position: relative; overflow: hidden;">
+    <img id="catAnimationImg" src="cattyping.gif" alt="Cat typing" style="width: 120px; height: 120px; object-fit: contain; display: block; margin: 0 auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
   </div>
-  <input type="text" id="passcodeInput" placeholder="Enter passcode" style="margin-bottom: 10px; padding: 10px; font-size: 16px; border: 2px solid #ccc; border-radius: 5px;">
-  <button id="submitPasscodeBtn">Submit</button>
+  
+  <!-- Replace the custom button implementation -->
+  <div class="custom-button-container">
+    <button id="customStartButton" aria-label="Start"></button>
+  </div>
+  
+  <!-- Original button (hidden) -->
+  <button id="startButton" style="display: none;">Start</button>
  </div>
 
  <!-- Move topic selection outside of app div and into its own section -->
- <div id="topicSelection" style="display: none; margin-top: 20px; text-align: center;">
-  <img src="title.png" alt="ClozeCat" style="max-width: 250px; margin-bottom: 15px;">
-  <h3>Select topics:</h3>
+ <div id="topicSelection" class="app-card" style="display: none; margin-top: 15px; text-align: center;">
+  <img src="title.png" alt="ClozeCat" style="max-width: 187px; margin-bottom: 11px;">
+  
+  <!-- Cup animation container -->
+  <div id="cupAnimation" style="height: 100px; width: 100px; margin: 5px auto 15px; position: relative;">
+    <img id="cupAnimationImg" src="cup1.png" alt="Cat sipping" style="width: 100px; height: 100px; object-fit: contain; display: block; margin: 0 auto;">
+  </div>
+  
+  <h3 style="font-size: 16px; margin: 7px 0;">Choose your topics:</h3>
   <div>
     <label><input type="checkbox" id="allTopicsToggle"> All topics</label>
   </div>
-  <div id="topicsList" style="margin: 10px 0;">
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Connectors"> Connectors</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Prepositions"> Prepositions</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Modal Verbs"> Modal Verbs</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Reported Speech"> Reported Speech</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Passive Voice"> Passive Voice</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Conditionals"> Conditionals</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Relative Pronouns"> Relative Pronouns</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Phrasal Verbs"> Phrasal Verbs</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Quantifiers"> Quantifiers</label>
-    <label style="display: block; margin: 5px;"><input type="checkbox" class="topicToggle" value="Auxiliary Verbs"> Auxiliary Verbs</label>
+  <div id="topicsList" style="margin: 7px 0; display: flex; flex-wrap: wrap; justify-content: center;">
+    <div style="width: 50%; box-sizing: border-box; padding: 0 5px;">
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Connectors"> Connectors</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Prepositions"> Prepositions</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Modal Verbs"> Modal Verbs</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Reported Speech"> Reported Speech</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Passive Voice"> Passive Voice</label>
+    </div>
+    <div style="width: 50%; box-sizing: border-box; padding: 0 5px;">
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Conditionals"> Conditionals</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Relative Pronouns"> Relative Pronouns</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Phrasal Verbs"> Phrasal Verbs</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Quantifiers"> Quantifiers</label>
+      <label style="display: block; margin: 4px; font-size: 14px;"><input type="checkbox" class="topicToggle" value="Auxiliary Verbs"> Auxiliary Verbs</label>
+    </div>
   </div>
   
   <!-- Add sentence count input -->
   <div style="margin: 15px 0;">
     <label for="sentenceCountInput" style="display: block; margin-bottom: 5px; font-weight: bold;">How many sentences? (0-100)</label>
-    <input type="number" id="sentenceCountInput" min="1" max="100" value="20" style="padding: 8px; width: 100px; text-align: center; font-size: 16px; border: 2px solid #5cacee; border-radius: 5px;">
+    <input type="number" id="sentenceCountInput" min="1" max="100" value="20" style="padding: 6px; width: 75px; text-align: center; font-size: 12px; border: 2px solid #5cacee; border-radius: 5px;">
   </div>
   
-  <button id="startGameBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 16px;">Start Game</button>
+  <button id="startGameBtn" style="margin-top: 10px; padding: 7px 15px; font-size: 12px;">Start Game</button>
  </div>
 
   <div id="app" style="display: none;">
     <!-- Add restart button at the top -->
-    <button id="restartAppBtn" style="position: absolute; top: 10px; left: 10px; font-size: 18px; padding: 5px 10px; background: #5cacee; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 100;">↺ Restart</button>
+    <button id="restartAppBtn" style="position: absolute; top: 10px; left: 10px; font-size: 14px; padding: 4px 8px; background: #5cacee; color: white; border: none; border-radius: 5px; cursor: pointer; z-index: 100;">↺ Restart</button>
     
-    <img id="titleImg" src="title.png" alt="ClozeCat" />
-    <div id="speechBubble"></div>
-    <div id="thoughtBubble"></div>
+    <img id="titleImg" src="title.png" alt="ClozeCat" style="max-width: 165px;">
+    <div id="speechBubble" style="top: 105px; padding: 11px 15px; font-size: 0.71rem;"></div>
+    <div id="thoughtBubble" style="top: 105px; padding: 11px 15px; font-size: 0.71rem;"></div>
     <div id="charContainer">
-      <div id="exclamation">!</div>
-      <img id="charImg" src="waiting.png" alt="Character">
+      <div id="exclamation" style="top: 80px; font-size: 1.5rem;">!</div>
+      <img id="charImg" src="catstill.png" alt="Character" style="width: 90px; height: 90px; object-fit: contain; position: relative; display: block; margin: 0 auto;">
     </div>
-    <div id="sentenceContainer">Loading...</div>
+    <div id="sentenceContainer" style="position: relative; z-index: 1; font-size: 0.9rem; min-height: 40px; padding: 10px; background-color: rgba(255, 255, 255, 0.95); border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-top: 10px; padding-top: 15px; margin-bottom: 15px;">Loading...</div>
     <form id="answerForm">
-      <input type="text" id="answerInput" placeholder="Type your answer…" autocomplete="off" required />
-      <button type="submit" id="submitBtn">Submit</button>
+      <input type="text" id="answerInput" placeholder="Type your answer…" autocomplete="off" required style="padding: 8px; font-size: 0.75rem; width: 110px; max-width: 110px; border-radius: 6px; border: 1px solid #ddd;">
+      <button type="submit" id="submitBtn" style="padding: 8px 12px; font-size: 0.75rem; border-radius: 6px; background-color: #5cacee; color: white; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Submit</button>
     </form>
-    <button id="continueBtn">👉 Continue</button>
-    <div id="feedback"></div>
+    <button id="continueBtn" style="padding: 9px 14px; font-size: 0.75rem;">👉 Continue</button>
+    <div id="feedback" style="height: auto; min-height: 1.05em; margin: 7px 0; padding: 6px; font-size: 0.75rem;"></div>
     <div id="progress"></div>
-    <div id="progressBar"><div id="progressFill"></div></div>
+    <div id="progressBar" style="height: 7px; margin-top: 7px;"><div id="progressFill"></div></div>
     <div style="position: relative; display: inline-block;">
-    <button id="hintBtn">🐾 Hint</button>
+    <button id="hintBtn" style="padding: 9px 14px; font-size: 0.75rem;">🐾 Hint</button>
     <div id="pawTap">🐾</div>
     </div>
-    <button id="toggleSoundBtn">🎵 Sound: On</button>
-    <button id="restartBtn">🔁 Play Again</button>
+    <button id="toggleSoundBtn" style="padding: 9px 14px; font-size: 0.75rem;">🎵 Sound: On</button>
+    <button id="restartBtn" style="padding: 9px 14px; font-size: 0.75rem;">🔁 Play Again</button>
     
     <!-- Moved the score counter here inside the white box and initially hidden -->
-    <div id="scoreCounter" style="display: none; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
+    <div id="scoreCounter" style="display: none; margin-top: 11px; padding-top: 7px; border-top: 1px solid #eee; font-size: 0.75rem;">
       Correct Answers: <span id="correctCount">0</span> | Incorrect Answers: <span id="incorrectCount">0</span>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const passcodeInput = document.getElementById('passcodeInput');
-      const submitPasscodeBtn = document.getElementById('submitPasscodeBtn');
+      // Initialize audio objects outside event listeners to avoid recreating them each time
+      const typeSound = new Audio('type.wav');
+      typeSound.volume = 0.8; // Reduce volume to 80% (20% reduction)
+      typeSound.loop = false; // Change to not loop
+
+      const clickSound = new Audio('click.wav'); 
+      clickSound.volume = 0.8; // Slightly lower volume for hover sound
+
+      const kittySound = new Audio('kitty.wav');
+      kittySound.volume = 1.0; // Full volume
+      
+      // Frame-based animation parameters and variables
+      const typingFrames = ['type2.png', 'type3.png', 'type4.png']; // Removed type1.png from sequence
+      let frameIndex = 0;
+      let animationInterval;
+      const frameDelay = 150; // milliseconds between frames (adjust for speed)
+      
+      // Chat animation variables and frames
+      const chatFrames = ['chat1.png', 'chat2.png', 'chat3.png'];
+      let chatFrameIndex = 0;
+      let chatAnimationInterval;
+      const chatFrameDelay = 150; // milliseconds between chat frames
+      
+      // Cup animation variables
+      const cupFrames = ['cup1.png', 'cup2.png', 'cup3.png', 'cup4.png'];
+      let cupFrameIndex = 0;
+      let cupAnimationInterval;
+      let cupSipTimeout;
+      const cupFrameDelay = 250; // milliseconds between cup frames
+      const cupAnimationImg = document.getElementById('cupAnimationImg');
+      
+      // Function to animate cat talking using individual frames
+      function animateCatTalking(imgElement, duration = 800) {
+        // Clear any existing animation
+        if (chatAnimationInterval) {
+          clearInterval(chatAnimationInterval);
+          chatAnimationInterval = null;
+        }
+        
+        if (animationInterval) {
+          clearInterval(animationInterval);
+          animationInterval = null;
+        }
+        
+        // Reset to first frame
+        chatFrameIndex = 0;
+        imgElement.src = chatFrames[chatFrameIndex];
+        
+        // Create animation interval that cycles through frames
+        chatAnimationInterval = setInterval(() => {
+          chatFrameIndex = (chatFrameIndex + 1) % chatFrames.length;
+          imgElement.src = chatFrames[chatFrameIndex];
+        }, chatFrameDelay);
+        
+        // If duration is provided, stop the animation after that time
+        if (duration > 0) {
+          setTimeout(() => {
+            if (chatAnimationInterval) {
+              clearInterval(chatAnimationInterval);
+              chatAnimationInterval = null;
+              imgElement.src = 'catstill.png';
+            }
+          }, duration);
+        }
+        
+        return chatAnimationInterval;
+      }
+      
+      // Function to stop the chat animation
+      function stopChatAnimation() {
+        if (chatAnimationInterval) {
+          clearInterval(chatAnimationInterval);
+          chatAnimationInterval = null;
+        }
+      }
+      
+      // Start the cup animation as soon as the page loads
+      function startCupAnimation() {
+        // Clear any existing cup animation intervals/timeouts
+        if (cupAnimationInterval) {
+          clearInterval(cupAnimationInterval);
+          cupAnimationInterval = null;
+        }
+        if (cupSipTimeout) {
+          clearTimeout(cupSipTimeout);
+          cupSipTimeout = null;
+        }
+        
+        // Function to cycle through cup frames
+        function animateCupFrames() {
+          cupAnimationInterval = setInterval(() => {
+            cupFrameIndex = (cupFrameIndex + 1) % cupFrames.length;
+            cupAnimationImg.src = cupFrames[cupFrameIndex];
+          }, cupFrameDelay);
+          
+          // Switch to catsip.png after 4 seconds
+          cupSipTimeout = setTimeout(() => {
+            clearInterval(cupAnimationInterval);
+            cupAnimationImg.src = 'catsip.png';
+            
+            // Switch back to cup animation after 3 seconds
+            setTimeout(() => {
+              cupFrameIndex = 0;
+              cupAnimationImg.src = cupFrames[cupFrameIndex];
+              animateCupFrames();
+            }, 3000); // 3 seconds of sipping
+          }, 4000); // 4 seconds of cup animation
+        }
+        
+        // Start initial cup animation
+        cupFrameIndex = 0;
+        cupAnimationImg.src = cupFrames[cupFrameIndex];
+        animateCupFrames();
+      }
+      
+      // Start cup animation when topic selection screen is visible
+      if (document.getElementById('topicSelection').style.display !== 'none') {
+        startCupAnimation();
+      }
+      
+      // Also start cup animation when custom start button is clicked
+      document.getElementById('customStartButton').addEventListener('click', () => {
+        // This will run when the topic selection screen becomes visible
+        startCupAnimation();
+      });
+      
+      // Function to animate cat using individual frames
+      function animateCatTyping(imgElement, isPlaying = true) {
+        // Clear any existing animation
+        if (animationInterval) {
+          clearInterval(animationInterval);
+          animationInterval = null;
+        }
+        
+        // If not playing animation, just return
+        if (!isPlaying) return;
+        
+        // Reset to first frame
+        frameIndex = 0;
+        imgElement.src = typingFrames[frameIndex];
+        
+        // Create animation interval that cycles through frames
+        animationInterval = setInterval(() => {
+          frameIndex = (frameIndex + 1) % typingFrames.length;
+          imgElement.src = typingFrames[frameIndex];
+        }, frameDelay);
+        
+        return animationInterval;
+      }
+      
+      // Function to stop the frame animation
+      function stopCatAnimation() {
+        if (animationInterval) {
+          clearInterval(animationInterval);
+          animationInterval = null;
+        }
+      }
+
+      // Create an array of all available cat sounds with your specified filenames
+      const catSounds = [
+        'catr2.wav',
+        'catr3.wav',
+        'catr4.wav',
+        'catr5.wav',
+        'catr6.wav'
+      ];
+
+      // Add this after your other audio initializations
+      const backgroundMusic = new Audio('loope.wav'); // Changed to loope.wav
+      backgroundMusic.loop = true;
+      backgroundMusic.volume = 0.21; // Reduced by 15% (from 0.25 to 0.21)
+      backgroundMusic.preload = 'auto';
+
+      // Function to play a random cat sound with increased volume
+      function playRandomCatSound() {
+        // Select a random sound from the array
+        const randomIndex = Math.floor(Math.random() * catSounds.length);
+        const selectedSound = catSounds[randomIndex];
+        
+        // Create and play the random sound with increased volume (from 0.85 to 1.0)
+        const catSound = new Audio(selectedSound);
+        catSound.volume = 1.0; // Increased from 0.85 to full volume (about 20% increase)
+        
+        // Return a promise that resolves when the sound plays or rejects on error
+        return catSound.play().catch(e => {
+          console.log(`Couldn't play cat sound (${selectedSound}): ${e}`);
+        });
+      }
+
+      // Get references to elements
+      const startButton = document.getElementById('startButton');
+      const customStartButton = document.getElementById('customStartButton');
       const startScreen = document.getElementById('startScreen');
       const topicSelection = document.getElementById('topicSelection');
       const allTopicsToggle = document.getElementById('allTopicsToggle');
       const topicToggles = document.querySelectorAll('.topicToggle');
       const startGameBtn = document.getElementById('startGameBtn');
       const app = document.getElementById('app');
-      const passwordSpeechBubble = document.getElementById('passwordSpeechBubble');
-      const startCat = document.getElementById('startCat');
       const restartAppBtn = document.getElementById('restartAppBtn');
       const sentenceCountInput = document.getElementById('sentenceCountInput');
+      const catAnimationImg = document.getElementById('catAnimationImg');
+      
+      // Start the cat animation sequence immediately using our new frame-based animation
+      animateCatTyping(catAnimationImg);
+      
+      // Add a click event listener to the document to enable sounds
+      document.addEventListener('click', function initAudio() {
+        // Try to play the typing sound - but don't loop it anymore
+        typeSound.play().then(() => {
+          // Success - sound is playing
+          document.removeEventListener('click', initAudio); // Remove the listener
+          
+          // When typing sound ends, play meow and change animation
+          typeSound.onended = () => {
+            // Stop the typing animation
+            stopCatAnimation();
+            
+            // Change to chat animation and play random cat sound
+            animateCatTalking(catAnimationImg);
+            
+            // Play random cat sound with 15% reduced volume
+            playRandomCatSound();
+            
+            // After 0.8 seconds, change to catstill.png
+            setTimeout(() => {
+              catAnimationImg.src = "catstill.png";
+              
+              // Add blinking effect with catblink.png
+              setTimeout(() => {
+                catAnimationImg.src = "catblink.png";
+                setTimeout(() => {
+                  catAnimationImg.src = "catstill.png";
+                }, 200);
+              }, 2000);
+            }, 800);
+          };
+
+          // If the typing sound is longer than 1 second, force the animation to progress
+          // This ensures the animation doesn't wait too long if the sound file is lengthy
+          setTimeout(() => {
+            if (animationInterval) { // Check if typing animation is still running
+              // Stop the typing animation
+              stopCatAnimation();
+              
+              typeSound.onended = null; // Remove the onended handler
+              animateCatTalking(catAnimationImg);
+              
+              // Play random cat sound with 15% reduced volume
+              playRandomCatSound();
+              
+              setTimeout(() => {
+                catAnimationImg.src = "catstill.png";
+                
+                // Add blinking effect with catblink.png
+                setTimeout(() => {
+                  catAnimationImg.src = "catblink.png";
+                  setTimeout(() => {
+                    catAnimationImg.src = "catstill.png";
+                  }, 200);
+                }, 2000);
+              }, 800);
+            }
+          }, 1000); // Reduced from 2 seconds to 1 second
+        }).catch(error => {
+          // If there's still an error, we'll try again on next click
+          console.log("Audio couldn't start: ", error);
+        });
+      }, { once: true }); // Only trigger once
 
       let selectedTopics = [];
       let availableTopics = [];
@@ -140,20 +685,41 @@
           console.error('Error loading YAML data:', error);
         });
 
-      // Handle passcode submission
-      submitPasscodeBtn.addEventListener('click', () => {
-        const passcode = passcodeInput.value.trim().toLowerCase();
-        if (passcode === 'fish') { // Replace 'fish' with the correct passcode
-          startScreen.style.display = 'none'; // Hide start screen
-          topicSelection.style.display = 'block'; // Show topic selection
-        } else {
-          passwordSpeechBubble.style.display = 'block';
-          startCat.src = 'sad.png'; // Change cat image to sad state
-          setTimeout(() => {
-            passwordSpeechBubble.style.display = 'none';
-            startCat.src = 'waiting.png'; // Revert cat image to waiting state
-          }, 2000);
+      // Handle custom start button sounds
+
+      // Add hover sound effect with debounce to prevent rapid firing
+      let hoverTimer;
+      customStartButton.addEventListener('mouseenter', () => {
+        clearTimeout(hoverTimer);
+        // Play click.wav on hover only if it's not already playing
+        if (clickSound.paused) {
+          clickSound.currentTime = 0; // Reset to beginning
+          clickSound.play().catch(e => console.log("Couldn't play hover sound: ", e));
         }
+      });
+
+      // Play background music when topic selection screen appears
+      customStartButton.addEventListener('click', () => {
+        // Stop the hover sound if it's playing
+        clickSound.pause();
+        clickSound.currentTime = 0;
+        
+        // Play tap.wav on button click with further reduced volume
+        const buttonClickSound = new Audio('tap.wav');
+        buttonClickSound.volume = 0.6; // 60% volume (reduced by 40% total)
+        buttonClickSound.play().catch(e => console.log("Couldn't play tap sound: ", e));
+        
+        startScreen.style.display = 'none'; // Hide start screen
+        topicSelection.style.display = 'block'; // Show topic selection
+        
+        // Start the background music
+        backgroundMusic.play().catch(e => console.log("Couldn't play background music: ", e));
+      });
+
+      // Original start button click handler - keep this as a fallback
+      startButton.addEventListener('click', () => {
+        startScreen.style.display = 'none'; // Hide start screen
+        topicSelection.style.display = 'block'; // Show topic selection
       });
 
       // Handle "All topics" toggle
@@ -209,7 +775,11 @@
           return;
         }
 
-        // Store the selected topics and sentence count in a global variable for the script.js to use
+        // Stop the background music
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+
+        // Rest of your existing code...
         window.selectedTopics = selectedTopics;
         window.sentenceCount = sentenceCount;
         console.log('Selected Topics:', selectedTopics);
